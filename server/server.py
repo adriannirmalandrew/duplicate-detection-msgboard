@@ -25,8 +25,15 @@ def register_user():
 
 @server.route('/loginUser', methods = ['POST'])
 def login_user():
-	#TODO
-	return None
+	username = request.args['username']
+	password = request.args['password']
+	session_token = actions.user.login(sql_handle, username, password)
+	if session_token is None:
+		return make_response('Login Failed', 409)
+	#Return token as cookie
+	login_resp = make_response('Logged In', 200)
+	login_resp.set_cookie('session_token', session_token)
+	return login_resp
 
 @server.route('/logoutUser', methods = ['POST'])
 def logout_user():

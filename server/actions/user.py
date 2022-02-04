@@ -1,6 +1,8 @@
 import mysql.connector as sqlconn
 from hashlib import sha256
 import jwt
+from datetime import datetime, timedelta
+import time
 
 # Password hash:
 def pw_hash(password):
@@ -23,12 +25,21 @@ def register(handle, username, password):
 		return False
 
 # Login:
-def login():
-	#Check if user exists
-	#Generate JWT secret
+def login(handle, username, password):
+	#Generate JWT token
+	session_secret = pw_hash(username + str(time.time()))
+	session_token = jwt.encode({'user': username, 'exp': datetime.utcnow() + timedelta(hours = 1)}, session_secret)
 	#Store JWT secret in DB
-	#Return token
-	return None
+	login_cur = handle.cursor()
+	passwd_hash = pw_hash(password)
+	login_cur.execute('update users set session_secret=%s where username=%s and password_hash=%s', (session_secret, username, passwd_hash))
+	handle.commit()
+	changed = login_cur.rowcount
+	login_cur.close()
+	#Return token if successful
+	if changed != 1:
+		return None
+	return session_token
 
 # Logout:
 def logout():
