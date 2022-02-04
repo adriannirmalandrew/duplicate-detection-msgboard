@@ -1,14 +1,27 @@
 #!/usr/bin/python
 
-from flask import Flask
+import mysql.connector as sqlconn
+from flask import Flask, request, make_response
+import actions.user
 
+## Server setup:
 server = Flask(__name__)
+sql_handle = None
+
+@server.before_first_request
+def connect_db():
+	global sql_handle
+	sql_handle = sqlconn.connect(host = 'localhost', user = 'project', password = 'project', database = 'socialmedia')
 
 ## User actions: Register, Login, Logout, Delete
 @server.route('/registerUser', methods = ['POST'])
 def register_user():
-	#TODO
-	return None
+	username = request.args['username']
+	password = request.args['password']
+	registered = actions.user.register(sql_handle, username, password)
+	if not registered:
+		return make_response('Registration Failed', 409)
+	return make_response('Registered', 200)
 
 @server.route('/loginUser', methods = ['POST'])
 def login_user():
