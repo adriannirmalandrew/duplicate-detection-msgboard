@@ -67,7 +67,7 @@ def delete(handle, username, password):
         handle.commit()
 		reg_count = del_cur.rowcount
 		del_cur.close()
-		return reg_count == 1
+		return reg_count == 1 
     except:
         #User Not Found or Password Not Matching
         return False
