@@ -42,13 +42,33 @@ def login(handle, username, password):
 	return session_token
 
 # Logout:
-def logout():
+def logout(handle, username, password, session_secret, session_token):
 	#Validate session token
-	#Remove JWT secret from DB
+    session_chk = jwt.decode(session_token, key = session_secret)
+    if session_chk == InvalidSignatureError:
+        return None
+    #Remove JWT secret from DB
+    logout_cur = handle.cursor()
+    passwd_hash = pw_hash(password)
+    logout_cur.execute('update users set session_secret=null where username=%s and password_hash=%s', (username, passwd_hash))
+    handle.commit()
+    changed = logout_cur.rowcount
+    logout_cur.close()
 	return None
 
 # Delete account:
-def delete():
+def delete(handle, username, password):
 	#Hash password
+    passwd_hash = pw_hash(password)
 	#Remove account data from DB
+    del_cur = handle.cursor()
+    try:
+        del_cur.execute('delete from users where username = %s and password_hash=%s', (username, passwd_hash))
+        handle.commit()
+		reg_count = del_cur.rowcount
+		del_cur.close()
+		return reg_count == 1
+    except:
+        #User Not Found or Password Not Matching
+        return False
 	return None
