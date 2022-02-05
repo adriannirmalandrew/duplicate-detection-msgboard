@@ -42,33 +42,33 @@ def login(handle, username, password):
 	return session_token
 
 # Logout:
-def logout(handle, username, password, session_secret, session_token):
+def logout(handle, username, session_token):
+	logout_cur = handle.cursor()
 	#Validate session token
-    session_chk = jwt.decode(session_token, key = session_secret)
-    if session_chk == InvalidSignatureError:
-        return None
-    #Remove JWT secret from DB
-    logout_cur = handle.cursor()
-    passwd_hash = pw_hash(password)
-    logout_cur.execute('update users set session_secret=null where username=%s and password_hash=%s', (username, passwd_hash))
-    handle.commit()
-    changed = logout_cur.rowcount
-    logout_cur.close()
-	return None
+	logout_cur.execute('select session_secret from users where username=%s', (username,))
+	session_secret = logout_cur.fetchall()[0][0]
+	session_chk = jwt.decode(session_token, session_secret, ['HS256'])
+	if session_chk['user'] != username:
+		logout_cur.close()
+		return False
+	#Remove JWT secret from DB
+	logout_cur.execute('update users set session_secret=%s where username=%s', ('none', username))
+	logout_count = logout_cur.rowcount
+	logout_cur.close()
+	return logout_count == 1
 
 # Delete account:
 def delete(handle, username, password):
 	#Hash password
-    passwd_hash = pw_hash(password)
+	passwd_hash = pw_hash(password)
 	#Remove account data from DB
-    del_cur = handle.cursor()
-    try:
-        del_cur.execute('delete from users where username = %s and password_hash=%s', (username, passwd_hash))
-        handle.commit()
+	del_cur = handle.cursor()
+	try:
+		del_cur.execute('delete from users where username = %s and password_hash=%s', (username, passwd_hash))
+		handle.commit()
 		reg_count = del_cur.rowcount
 		del_cur.close()
 		return reg_count == 1 
-    except:
-        #User Not Found or Password Not Matching
-        return False
-	return None
+	except:
+		#User Not Found or Password Not Matching
+		return False
