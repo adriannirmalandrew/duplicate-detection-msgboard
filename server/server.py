@@ -56,7 +56,10 @@ def logout_user():
 def delete_user():
 	username = request.args['username']
 	password = request.args['password']
-	return None
+	deleted = actions.user.delete(sql_handle, username, password)
+	if not deleted:
+		return make_response('Account Deletion Failed!', 409)
+	return make_response('Account Deleted', 200)
 
 ## Post actions: Upload, Get, Delete, Report
 @server.route('/uploadPost', methods = ['POST'])
