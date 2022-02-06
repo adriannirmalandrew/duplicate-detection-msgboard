@@ -30,17 +30,19 @@ def login_user():
 	session_token = actions.user.login(sql_handle, username, password)
 	if session_token is None:
 		return make_response('Login Failed', 409)
-	#Return session token as cookie
+	#Return username and session token as cookies
 	login_resp = make_response('Logged In', 200)
+	login_resp.set_cookie('username', username)
 	login_resp.set_cookie('session_token', session_token)
 	return login_resp
 
 @server.route('/logoutUser', methods = ['POST'])
 def logout_user():
-	username = request.args['username']
-	#Get session token
+	#Get username and session token
+	username = None
 	session_token = None
 	try:
+		username = request.cookies['username']
 		session_token = request.cookies['session_token']
 	except:
 		return make_response('Not Logged In!', 403)
@@ -49,6 +51,8 @@ def logout_user():
 	if not logged_out:
 		return make_response('Logout Failed', 409)
 	logout_resp = make_response('Logged Out', 200)
+	#Invalidate username and session token cookies
+	logout_resp.set_cookie('username', '', expires = 0)
 	logout_resp.set_cookie('session_token', '', expires = 0)
 	return logout_resp
 
