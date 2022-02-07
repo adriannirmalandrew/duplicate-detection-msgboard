@@ -41,17 +41,27 @@ def login(handle, username, password):
 		return None
 	return session_token
 
+# Validate a logged in user's session:
+def validate(handle, username, session_token):
+	validate_cur = handle.cursor()
+	#Get session secret
+	validate_cur.execute('select session_secret from users where username=%s', (username,))
+	session_secret = validate_cur.fetchall()[0][0]
+	validate_cur.close()
+	#Validate token
+	try:
+		session_chk = jwt.decode(session_token, session_secret, ['HS256'])
+	except:
+		return False
+	return session_chk['user'] == username
+
 # Logout:
 def logout(handle, username, session_token):
 	logout_cur = handle.cursor()
-	#Validate session token
-	logout_cur.execute('select session_secret from users where username=%s', (username,))
-	session_secret = logout_cur.fetchall()[0][0]
-	session_chk = jwt.decode(session_token, session_secret, ['HS256'])
-	if session_chk['user'] != username:
-		logout_cur.close()
+	#Validate session token:
+	if not validate(handle, username, session_token):
 		return False
-	#Remove JWT secret from DB
+	#If valid, remove JWT secret from DB
 	logout_cur.execute('update users set session_secret=%s where username=%s', ('none', username))
 	logout_count = logout_cur.rowcount
 	logout_cur.close()

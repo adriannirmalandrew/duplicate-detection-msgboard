@@ -13,14 +13,14 @@ def connect_db():
 	global sql_handle
 	sql_handle = sqlconn.connect(host = 'localhost', user = 'project', password = 'project', database = 'socialmedia')
 
-## User actions: Register, Login, Logout, Delete
+## User actions: Register, Login, Validate Session, Logout, Delete
 @server.route('/registerUser', methods = ['POST'])
 def register_user():
 	username = request.args['username']
 	password = request.args['password']
 	registered = actions.user.register(sql_handle, username, password)
 	if not registered:
-		return make_response('Registration Failed', 409)
+		return make_response('Registration Failed', 401)
 	return make_response('Registered', 200)
 
 @server.route('/loginUser', methods = ['POST'])
@@ -29,12 +29,31 @@ def login_user():
 	password = request.args['password']
 	session_token = actions.user.login(sql_handle, username, password)
 	if session_token is None:
-		return make_response('Login Failed', 409)
+		return make_response('Login Failed', 401)
 	#Return username and session token as cookies
 	login_resp = make_response('Logged In', 200)
 	login_resp.set_cookie('username', username)
 	login_resp.set_cookie('session_token', session_token)
 	return login_resp
+
+@server.route('/validateSession', methods = ['POST'])
+def validate_session():
+	#Get username and session token
+	username = None
+	session_token = None
+	try:
+		username = request.cookies['username']
+		session_token = request.cookies['session_token']
+	except:
+		return make_response('Not Logged In!', 401)
+	#Check if valid:
+	session_valid = actions.user.validate(sql_handle, username, session_token)
+	if not session_valid:
+		return make_response('Invalid Session', 401)
+		#Unset username and session token cookies
+		logout_resp.set_cookie('username', '', expires = 0)
+		logout_resp.set_cookie('session_token', '', expires = 0)
+	return make_response('Valid Session', 200)
 
 @server.route('/logoutUser', methods = ['POST'])
 def logout_user():
@@ -45,13 +64,13 @@ def logout_user():
 		username = request.cookies['username']
 		session_token = request.cookies['session_token']
 	except:
-		return make_response('Not Logged In!', 403)
+		return make_response('Not Logged In!', 401)
 	#Log out
 	logged_out = actions.user.logout(sql_handle, username, session_token)
 	if not logged_out:
-		return make_response('Logout Failed', 409)
+		return make_response('Logout Failed', 401)
 	logout_resp = make_response('Logged Out', 200)
-	#Invalidate username and session token cookies
+	#Unset username and session token cookies
 	logout_resp.set_cookie('username', '', expires = 0)
 	logout_resp.set_cookie('session_token', '', expires = 0)
 	return logout_resp
@@ -62,7 +81,7 @@ def delete_user():
 	password = request.args['password']
 	deleted = actions.user.delete(sql_handle, username, password)
 	if not deleted:
-		return make_response('Account Deletion Failed!', 409)
+		return make_response('Account Deletion Failed!', 401)
 	return make_response('Account Deleted', 200)
 
 ## Post actions: Upload, Get, Delete, Report
