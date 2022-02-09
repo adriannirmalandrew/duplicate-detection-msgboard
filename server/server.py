@@ -121,6 +121,22 @@ def delete_comment():
 	#TODO
 	return None
 
+## Follow actions: GetFollowed, Follow, Unfollow
+@server.route('/getFollowed', methods = ['GET'])
+def get_followed():
+	#TODO
+	return None
+
+@server.route('/followUser', methods = ['POST'])
+def follow_user():
+	#TODO
+	return None
+
+@server.route('/unfollowUser', methods = ['POST'])
+def unfollow_user():
+	#TODO
+	return None
+
 ## Admin actions: SuspendUser, BanUser
 @server.route('/suspendUser', methods = ['POST'])
 def suspend_user():
