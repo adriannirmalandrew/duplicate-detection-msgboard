@@ -1,12 +1,9 @@
 //Login function handler:
 function login() {
 	event.preventDefault();
-	//Get form data:
-	let username = $("#login-username").val();
-	let password = $("#login-password").val();
 	//Perform login:
 	$.ajax({
-		url: "/action/loginUser?username=" + username + "&password=" + password,
+		url: "/action/loginUser?" + $("#login-form").serialize(),
 		method: "POST",
 		statusCode: {
 			200: function() {

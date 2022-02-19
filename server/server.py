@@ -13,6 +13,14 @@ def connect_db():
 	global sql_handle
 	sql_handle = sqlconn.connect(host = 'localhost', user = 'project', password = 'project', database = 'socialmedia')
 
+## Common functions: Invalid session response
+def invalid_session_response():
+	logout_resp = make_response('Invalid Session', 401)
+	#Unset username and session token cookies
+	logout_resp.set_cookie('username', '', expires = 0)
+	logout_resp.set_cookie('session_token', '', expires = 0)
+	return logout_resp
+
 ## User actions: Register, Login, Validate Session, Logout, Delete
 @server.route('/registerUser', methods = ['POST'])
 def register_user():
@@ -49,10 +57,14 @@ def validate_session():
 	#Check if valid:
 	session_valid = actions.user.validate(sql_handle, username, session_token)
 	if not session_valid:
-		return make_response('Invalid Session', 401)
+		'''
+		logout_resp = make_response('Invalid Session', 401)
 		#Unset username and session token cookies
 		logout_resp.set_cookie('username', '', expires = 0)
 		logout_resp.set_cookie('session_token', '', expires = 0)
+		return logout_resp
+		'''
+		return invalid_session_response()
 	return make_response('Valid Session', 200)
 
 @server.route('/logoutUser', methods = ['POST'])
@@ -87,8 +99,23 @@ def delete_user():
 ## Post actions: Upload, Get, Delete, Report
 @server.route('/uploadPost', methods = ['POST'])
 def upload_post():
-	#TODO
-	return None
+	#Get username and session token
+	username = None
+	session_token = None
+	try:
+		username = request.cookies['username']
+		session_token = request.cookies['session_token']
+	except:
+		return make_response('Not Logged In!', 401)
+	#Verify session:
+	session_valid = actions.user.validate(sql_handle, username, session_token)
+	if not session_valid:
+		return invalid_session_response()
+	#Upload post:
+	uploaded = actions.post.upload(sql_handle, request.args)
+	if not uploaded:
+		return make_response('Post Uploading Failed!', 401)
+	return make_response('Post Uploaded', 200)
 
 @server.route('/getPost', methods = ['GET'])
 def get_post():
