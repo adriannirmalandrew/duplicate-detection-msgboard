@@ -2,7 +2,7 @@
 
 import mysql.connector as sqlconn
 from flask import Flask, request, make_response
-import actions.user
+import actions.user, actions.post
 
 ## Server setup:
 server = Flask(__name__)
@@ -57,13 +57,6 @@ def validate_session():
 	#Check if valid:
 	session_valid = actions.user.validate(sql_handle, username, session_token)
 	if not session_valid:
-		'''
-		logout_resp = make_response('Invalid Session', 401)
-		#Unset username and session token cookies
-		logout_resp.set_cookie('username', '', expires = 0)
-		logout_resp.set_cookie('session_token', '', expires = 0)
-		return logout_resp
-		'''
 		return invalid_session_response()
 	return make_response('Valid Session', 200)
 
@@ -112,10 +105,11 @@ def upload_post():
 	if not session_valid:
 		return invalid_session_response()
 	#Upload post:
-	uploaded = actions.post.upload(sql_handle, request.args)
+	uploaded = actions.post.upload(sql_handle, username, request.form, request.files)
 	if not uploaded:
-		return make_response('Post Uploading Failed!', 401)
+		return make_response('Post Uploading Failed!', 500)
 	return make_response('Post Uploaded', 200)
+	#TODO: Rewrite this section to be directly invoked via form submit instead
 
 @server.route('/getPost', methods = ['GET'])
 def get_post():

@@ -17,12 +17,12 @@
 	<!--Create a new post-->
 	<div id="create-post-div">
 		<h4>Create New Post</h4>
-		<form id="create-post-form">
+		<form id="create-post-form" method="POST" enctype="multipart/form-data">
 			<label for="new-post-content">Content:</label>
 			<input id="new-post-content" name="content" type="text"><br>
 			<label for="new-post-image">Image:</label>
-			<input id="new-post-image" name="image" type="file"><br>
-			<input type="submit" value="Create Post">
+			<input id="new-post-image" name="image" type="file" accept="image/*"><br>
+			<input type="submit" value="Create Post" onclick="uploadPost()">
 		</form>
 	</div>
 	<!--Display list of followers-->
