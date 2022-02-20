@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import os
 import mysql.connector as sqlconn
 from flask import Flask, request, make_response
 import actions.user, actions.post
@@ -104,10 +105,20 @@ def upload_post():
 	session_valid = actions.user.validate(sql_handle, username, session_token)
 	if not session_valid:
 		return invalid_session_response()
+	#Get post data:
+	post_content = request.form['content']
+	post_image = request.files['image']
+	has_image = (post_image.filename != '')
 	#Upload post:
-	uploaded = actions.post.upload(sql_handle, username, request.form, request.files)
-	if not uploaded:
+	post_id = actions.post.upload(sql_handle, username, post_content, has_image)
+	if post_id is None:
 		return make_response('Post Uploading Failed!', 500)
+	#Upload file, if exists:
+	if has_image:
+		fname_parts = post_image.filename.split('.')
+		fname_ext = fname_parts[-1]
+		post_image.save(os.path.join('../www/images/', post_id + '.' + fname_ext))
+	#Success
 	return make_response('Post Uploaded', 200)
 
 @server.route('/getPost', methods = ['GET'])
