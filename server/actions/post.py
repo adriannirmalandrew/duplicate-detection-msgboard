@@ -11,6 +11,10 @@ def upload(handle, username, form_data, form_files):
 def get():
 	return None
 
+# Get a user's posts:
+def get_user_posts():
+	return None
+
 # Delete post:
 def delete():
 	return None

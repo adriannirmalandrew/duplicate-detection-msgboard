@@ -89,7 +89,7 @@ def delete_user():
 		return make_response('Account Deletion Failed!', 401)
 	return make_response('Account Deleted', 200)
 
-## Post actions: Upload, Get, Delete, Report
+## Post actions: Upload, Get, GetUserPosts, Delete, Report
 @server.route('/uploadPost', methods = ['POST'])
 def upload_post():
 	#Get username and session token
@@ -109,10 +109,14 @@ def upload_post():
 	if not uploaded:
 		return make_response('Post Uploading Failed!', 500)
 	return make_response('Post Uploaded', 200)
-	#TODO: Rewrite this section to be directly invoked via form submit instead
 
 @server.route('/getPost', methods = ['GET'])
 def get_post():
+	#TODO
+	return None
+
+@server.route('/getUserPosts', methods = ['GET'])
+def get_user_posts():
 	#TODO
 	return None
 
