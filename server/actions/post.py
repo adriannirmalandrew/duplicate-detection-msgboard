@@ -1,4 +1,5 @@
 import time
+import json
 
 # Upload post:
 def upload(handle, username, content, has_image):
@@ -17,8 +18,16 @@ def upload(handle, username, content, has_image):
 	return post_id
 
 # Get post:
-def get():
-	return None
+def get(handle, post_id):
+	#Get from DB
+	get_cur = handle.cursor(dictionary = True)
+	get_cur.execute('select * from posts where post_id=%s', (post_id,))
+	post_res = get_cur.fetchall()
+	if len(post_res) == 0:
+		return None
+	#Convert to JSON
+	post_dict = post_res[0]
+	return json.dumps(post_dict)
 
 # Get a user's posts:
 def get_user_posts():

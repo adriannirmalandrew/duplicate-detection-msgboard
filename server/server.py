@@ -2,7 +2,7 @@
 
 import os
 import mysql.connector as sqlconn
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, Response
 import actions.user, actions.post
 
 ## Server setup:
@@ -123,8 +123,11 @@ def upload_post():
 
 @server.route('/getPost', methods = ['GET'])
 def get_post():
-	#TODO
-	return None
+	post_id = request.args['post_id']
+	post_json = actions.post.get(sql_handle, post_id)
+	if post_json is None:
+		return make_response('Post not found!', 404)
+	return Response(post_json, 200, mimetype = 'application/json')
 
 @server.route('/getUserPosts', methods = ['GET'])
 def get_user_posts():
