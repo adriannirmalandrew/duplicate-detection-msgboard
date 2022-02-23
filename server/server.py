@@ -115,9 +115,9 @@ def upload_post():
 		return make_response('Post Uploading Failed!', 500)
 	#Upload file, if exists:
 	if has_image:
-		fname_parts = post_image.filename.split('.')
-		fname_ext = fname_parts[-1]
-		post_image.save(os.path.join('../www/images/', post_id + '.' + fname_ext))
+		#fname_parts = post_image.filename.split('.')
+		#fname_ext = fname_parts[-1]
+		post_image.save(os.path.join('../www/images/', post_id))# + '.' + fname_ext))
 	#Success
 	return make_response('Post Uploaded', 200)
 

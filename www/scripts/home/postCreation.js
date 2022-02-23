@@ -19,6 +19,10 @@ function uploadPost() {
 				alert("Session Expired");
 				location.reload(true);
 			},
+			413: function() {
+				alert("Image too Large!");
+				location.reload()
+			},
 			500: function(xhr) {
 				alert(xhr.responseText);
 			},
