@@ -3,10 +3,12 @@
 import os
 import mysql.connector as sqlconn
 from flask import Flask, request, make_response, Response
+from werkzeug.utils import secure_filename
 import actions.user, actions.post
 
 ## Server setup:
 server = Flask(__name__)
+server.config['MAX_CONTENT_LENGTH'] = 5120 * 1024
 sql_handle = None
 
 @server.before_first_request
@@ -115,9 +117,7 @@ def upload_post():
 		return make_response('Post Uploading Failed!', 500)
 	#Upload file, if exists:
 	if has_image:
-		#fname_parts = post_image.filename.split('.')
-		#fname_ext = fname_parts[-1]
-		post_image.save(os.path.join('../www/images/', post_id))# + '.' + fname_ext))
+		post_image.save(os.path.join('../www/images/', secure_filename(post_id)))
 	#Success
 	return make_response('Post Uploaded', 200)
 

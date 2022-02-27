@@ -5,6 +5,7 @@
 	<meta charset="utf-8"/>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="/scripts/viewPost/getPost.js"></script>
+	<script src="/scripts/viewPost/buttonHandlers.js"></script>
 	<title>Post Viewer</title>
 </head>
 <body>
@@ -17,8 +18,8 @@
 	</div>
 	<!--Post actions (report, delete etc.)-->
 	<div id="post-actions-div">
-		<button id="post-report-button">Report Post</button>
-		<button id="post-delete-button">Delete Post</button>
+		<button id="post-report-button" onclick="reportPost()">Report Post</button>
+		<button id="post-delete-button" onclick="deletePost()">Delete Post</button>
 	</div>
 	<!--Write a new comment-->
 	<div id="comment-create-div">
