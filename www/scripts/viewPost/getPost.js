@@ -1,5 +1,29 @@
+function showButtons(isCreator) {
+	//Show delete button is user is creator, else show report button
+	if(isCreator) {
+		$("#post-delete-button").attr("hidden", false);
+	}
+	else {
+		$("#post-report-button").attr("hidden", false);
+	}
+}
+
+function showPostActions(postJson) {
+	//Validate session:
+	$.ajax({
+		url: "/action/validateSession",
+		method: "POST",
+		statusCode: {
+			200: function() {
+				//Check if user is the creator
+				let isCreator = (Cookies.get("username") == postJson["creator"]);
+				showButtons(isCreator);
+			},
+		},
+	});
+}
+
 function displayPostData(postJson) {
-	console.log(JSON.stringify(postJson));
 	//Show post ID and author
 	let postTitle = $("#post-display-title");
 	postTitle.html("Post " + postJson["post_id"] + " by " + postJson["creator"]);
@@ -12,9 +36,11 @@ function displayPostData(postJson) {
 		let imageObj = $("<img>");
 		imageObj.attr("src", "/images/" + postJson["post_id"]);
 		imageObj.attr("height", 400);
-		imageObj.attr("width", 400);
+		//imageObj.attr("width", 400);
 		postImageDiv.append(imageObj);
 	}
+	//Show post actions if logged in:
+	showPostActions(postJson);
 }
 
 function getPostData(postId) {

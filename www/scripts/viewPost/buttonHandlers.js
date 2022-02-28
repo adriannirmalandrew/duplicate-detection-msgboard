@@ -1,7 +1,3 @@
-function showButtons() {
-	//TODO
-}
-
 function reportPost() {
 	//TODO
 }
@@ -9,7 +5,3 @@ function reportPost() {
 function deletePost() {
 	//TODO
 }
-
-$(document).ready(function() {
-	showButtons();
-});
