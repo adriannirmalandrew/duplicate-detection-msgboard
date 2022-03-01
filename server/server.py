@@ -136,8 +136,24 @@ def get_user_posts():
 
 @server.route('/deletePost', methods = ['POST'])
 def delete_post():
-	#TODO
-	return None
+	#Get username and session token
+	username = None
+	session_token = None
+	try:
+		username = request.cookies['username']
+		session_token = request.cookies['session_token']
+	except:
+		return make_response('Not Logged In!', 401)
+	#Verify session:
+	session_valid = actions.user.validate(sql_handle, username, session_token)
+	if not session_valid:
+		return invalid_session_response()
+	#Delete post
+	post_id = request.args['post_id']
+	deleted = actions.post.delete(sql_handle, post_id)
+	if not deleted:
+		return make_response('Post Deletion Failed!', 500)
+	return make_response('Post Deleted', 200)
 
 @server.route('/reportPost', methods = ['POST'])
 def report_post():
