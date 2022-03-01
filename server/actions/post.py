@@ -34,8 +34,13 @@ def get_user_posts():
 	return None
 
 # Delete post:
-def delete():
-	return None
+def delete(handle, post_id):
+	del_cur = handle.cursor()
+	del_cur.execute('delete from posts where post_id=%s', (post_id,))
+	deleted = del_cur.rowcount
+	handle.commit()
+	del_cur.close()
+	return deleted == 1
 
 # Report duplicate post:
 def report():
