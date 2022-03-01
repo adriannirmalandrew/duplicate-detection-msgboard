@@ -153,6 +153,11 @@ def delete_post():
 	deleted = actions.post.delete(sql_handle, post_id)
 	if not deleted:
 		return make_response('Post Deletion Failed!', 500)
+	#Remove post image:
+	image_path = os.path.join('../www/images/', secure_filename(post_id))
+	image_exists = os.path.exists(image_path)
+	if image_exists:
+		os.remove(image_path)
 	return make_response('Post Deleted', 200)
 
 @server.route('/reportPost', methods = ['POST'])
