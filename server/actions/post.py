@@ -43,5 +43,13 @@ def delete(handle, post_id):
 	return deleted == 1
 
 # Report duplicate post:
-def report():
-	return None
+def report(handle, username, post_id):
+	#Get reporting time
+	report_time = int(time.time())
+	#Add report to DB
+	report_cur = handle.cursor()
+	report_cur.execute('insert into reports values(%s, %s, %s)', (post_id, username, report_time))
+	reported = report_cur.rowcount
+	handle.commit()
+	report_cur.close()
+	return reported == 1

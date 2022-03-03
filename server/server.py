@@ -162,8 +162,24 @@ def delete_post():
 
 @server.route('/reportPost', methods = ['POST'])
 def report_post():
-	#TODO
-	return None
+	#Get username and session token
+	username = None
+	session_token = None
+	try:
+		username = request.cookies['username']
+		session_token = request.cookies['session_token']
+	except:
+		return make_response('Not Logged In!', 401)
+	#Verify session:
+	session_valid = actions.user.validate(sql_handle, username, session_token)
+	if not session_valid:
+		return invalid_session_response()
+	#Create report:
+	post_id = request.args['post_id']
+	reported = actions.post.report(sql_handle, username, post_id)
+	if not reported:
+		return make_response('Report Creation Failed!', 500)
+	return make_response('Report Sent', 200)
 
 ## Comment actions: Get, Add, Delete
 @server.route('/getComments', methods = ['GET'])
