@@ -26,5 +26,23 @@ function deletePost() {
 }
 
 function reportPost() {
-	//TODO
+	//Get post ID
+	let postId = getPostId();
+	//Perform request
+	$.ajax({
+		url: "/action/reportPost?post_id=" + postId,
+		method: "POST",
+		statusCode: {
+			200: function(resp) {
+				alert(resp.responseText);
+				window.location.replace("/home.html");
+			},
+			401: function(resp) {
+				alert(resp.responseText + ": Not logged in!");
+			}
+			500: function(resp) {
+				alert(resp.responseText);
+			},
+		},
+	});
 }
