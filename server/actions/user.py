@@ -3,6 +3,7 @@ from hashlib import sha256
 import jwt
 from datetime import datetime, timedelta
 import time
+import json
 
 # Password hash:
 def pw_hash(password):
@@ -66,6 +67,16 @@ def logout(handle, username, session_token):
 	logout_count = logout_cur.rowcount
 	logout_cur.close()
 	return logout_count == 1
+
+# Get all user names:
+def get_all(handle):
+	get_all_cur = handle.cursor()
+	get_all_cur.execute('select username, is_admin from users')
+	user_list = get_all_cur.fetchall()
+	#Convert each row to list format
+	user_list = [list(u) for u in user_list]
+	get_all_cur.close()
+	return json.dumps(user_list)
 
 # Delete account:
 def delete(handle, username, password):

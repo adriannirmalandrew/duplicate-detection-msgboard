@@ -24,7 +24,7 @@ def invalid_session_response():
 	logout_resp.set_cookie('session_token', '', expires = 0)
 	return logout_resp
 
-## User actions: Register, Login, Validate Session, Logout, Delete
+## User actions: Register, Login, Validate Session, Logout, Get All, Delete
 @server.route('/registerUser', methods = ['POST'])
 def register_user():
 	username = request.args['username']
@@ -82,6 +82,20 @@ def logout_user():
 	logout_resp.set_cookie('username', '', expires = 0)
 	logout_resp.set_cookie('session_token', '', expires = 0)
 	return logout_resp
+
+@server.route('/getAllUsers', methods = ['GET'])
+def get_all_users():
+	#Get username and session token
+	username = None
+	session_token = None
+	try:
+		username = request.cookies['username']
+		session_token = request.cookies['session_token']
+	except:
+		return make_response('Not Logged In!', 401)
+	#Get list
+	user_list = actions.user.get_all(sql_handle)
+	return Response(user_list, 200, mimetype = 'application/json')
 
 @server.route('/deleteUser', methods = ['POST'])
 def delete_user():
