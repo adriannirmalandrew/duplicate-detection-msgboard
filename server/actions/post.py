@@ -30,8 +30,14 @@ def get(handle, post_id):
 	return json.dumps(post_dict)
 
 # Get a user's posts:
-def get_user_posts():
-	return None
+def get_user_posts(handle, creator):
+	posts_cur = handle.cursor()
+	posts_cur.execute('select post_id, content from posts where creator=%s', (creator,))
+	posts_list = posts_cur.fetchall()
+	#Convert each row to list
+	posts_list = [list(p) for p in posts_list]
+	posts_cur.close()
+	return json.dumps(posts_list)
 
 # Delete post:
 def delete(handle, post_id):

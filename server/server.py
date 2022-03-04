@@ -145,8 +145,18 @@ def get_post():
 
 @server.route('/getUserPosts', methods = ['GET'])
 def get_user_posts():
-	#TODO
-	return None
+	#Get username and session token
+	username = None
+	session_token = None
+	try:
+		username = request.cookies['username']
+		session_token = request.cookies['session_token']
+	except:
+		return make_response('Not Logged In!', 401)
+	#Get list
+	creator = request.args['creator']
+	user_list = actions.post.get_user_posts(sql_handle, creator)
+	return Response(user_list, 200, mimetype = 'application/json')
 
 @server.route('/deletePost', methods = ['POST'])
 def delete_post():
