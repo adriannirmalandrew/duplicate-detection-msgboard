@@ -73,9 +73,10 @@ def get_all(handle):
 	get_all_cur = handle.cursor()
 	get_all_cur.execute('select username, is_admin from users')
 	user_list = get_all_cur.fetchall()
+	get_all_cur.close()
 	#Convert each row to list format
 	user_list = [list(u) for u in user_list]
-	get_all_cur.close()
+	user_list = {'data': user_list}
 	return json.dumps(user_list)
 
 # Delete account:

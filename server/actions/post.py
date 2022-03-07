@@ -34,9 +34,10 @@ def get_user_posts(handle, creator):
 	posts_cur = handle.cursor()
 	posts_cur.execute('select post_id, content from posts where creator=%s', (creator,))
 	posts_list = posts_cur.fetchall()
+	posts_cur.close()
 	#Convert each row to list
 	posts_list = [list(p) for p in posts_list]
-	posts_cur.close()
+	posts_list = {'data': posts_list}
 	return json.dumps(posts_list)
 
 # Delete post:
