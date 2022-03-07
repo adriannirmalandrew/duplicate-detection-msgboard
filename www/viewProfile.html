@@ -5,9 +5,13 @@
 <head>
 	<meta charset="utf-8"/>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
 	<script src="/scripts/common/invalidSessionRedirect.js"></script>
 	<script src="/scripts/home/logoutHandler.js"></script>
-	<script src="/scripts/home/postCreation.js"></script>
+	<script src="/scripts/viewProfile/postList.js"></script>
+	<!--DataTables functionality-->
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
+	<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
 	<title>Home</title>
 </head>
 <body>
@@ -18,8 +22,7 @@
 	<!--Display all of user's posts-->
 	<div id="post-list-div">
 		<h4>User's Posts</h4>
-		TODO
-		<!--Insert a datatable.js here-->
+		<table id="user-posts-table" width=60%></table>
 	</div>
 </body>
 </html>
