@@ -37,7 +37,6 @@ def get_user_posts(handle, creator):
 	posts_cur.close()
 	#Convert each row to list
 	posts_list = [list(p) for p in posts_list]
-	#posts_list = {'data': posts_list}
 	return json.dumps(posts_list)
 
 # Delete post:

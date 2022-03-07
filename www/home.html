@@ -4,6 +4,7 @@
 <head>
 	<meta charset="utf-8"/>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
 	<script src="/scripts/common/invalidSessionRedirect.js"></script>
 	<script src="/scripts/home/logoutHandler.js"></script>
 	<script src="/scripts/home/postCreation.js"></script>
@@ -14,7 +15,10 @@
 	<title>Home</title>
 </head>
 <body>
-	<h3>Home Page (WIP)</h3>
+	<h3>
+		Home Page
+		<div id="header-username"></div>
+	</h3>
 	<div id="logout-div">
 		<button id="logout-button" onclick="logout()">Logout</button>
 	</div>

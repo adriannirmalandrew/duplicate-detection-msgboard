@@ -35,6 +35,12 @@ function getUserList() {
 	});
 }
 
+function setCurrentUserName() {
+	let username = Cookies.get("username");
+	$("#header-username").html("Welcome, " + username);
+}
+
 $(document).ready(function() {
+	setCurrentUserName();
 	getUserList();
 });
