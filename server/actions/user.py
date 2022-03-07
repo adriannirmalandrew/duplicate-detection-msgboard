@@ -76,7 +76,6 @@ def get_all(handle):
 	get_all_cur.close()
 	#Convert each row to list format
 	user_list = [list(u) for u in user_list]
-	user_list = {'data': user_list}
 	return json.dumps(user_list)
 
 # Delete account:

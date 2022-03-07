@@ -7,6 +7,10 @@
 	<script src="/scripts/common/invalidSessionRedirect.js"></script>
 	<script src="/scripts/home/logoutHandler.js"></script>
 	<script src="/scripts/home/postCreation.js"></script>
+	<script src="/scripts/home/userList.js"></script>
+	<!--DataTables functionality-->
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
+	<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
 	<title>Home</title>
 </head>
 <body>
@@ -28,8 +32,7 @@
 	<!--Display list of all users-->
 	<div id="user-list-div">
 		<h4>Registered Users</h4>
-		TODO
-		<!--Insert a datatable.js here-->
+		<table id="registered-users-table"></table>
 	</div>
 </body>
 </html>
