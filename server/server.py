@@ -174,7 +174,7 @@ def delete_post():
 		return invalid_session_response()
 	#Delete post
 	post_id = request.args['post_id']
-	deleted = actions.post.delete(sql_handle, post_id)
+	deleted = actions.post.delete(sql_handle, username, post_id)
 	if not deleted:
 		return make_response('Post Deletion Failed!', 500)
 	#Remove post image:

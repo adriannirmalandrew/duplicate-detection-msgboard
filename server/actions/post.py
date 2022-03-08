@@ -40,9 +40,9 @@ def get_user_posts(handle, creator):
 	return json.dumps(posts_list)
 
 # Delete post:
-def delete(handle, post_id):
+def delete(handle, username, post_id):
 	del_cur = handle.cursor()
-	del_cur.execute('delete from posts where post_id=%s', (post_id,))
+	del_cur.execute('delete from posts where post_id=%s and creator=%s', (post_id, username))
 	deleted = del_cur.rowcount
 	handle.commit()
 	del_cur.close()
