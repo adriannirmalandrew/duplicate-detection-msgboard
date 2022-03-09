@@ -17,7 +17,7 @@ function deletePost() {
 			},
 			401: function(resp) {
 				alert(resp.responseText + ": Not logged in!");
-			}
+			},
 			500: function(resp) {
 				alert(resp.responseText);
 			},
@@ -39,7 +39,7 @@ function reportPost() {
 			},
 			401: function(resp) {
 				alert(resp.responseText + ": Not logged in!");
-			}
+			},
 			500: function(resp) {
 				alert(resp.responseText);
 			},
