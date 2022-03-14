@@ -2,18 +2,25 @@ from nltk.corpus import stopwords
 import string
 from re import sub
 import math
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy
 
 '''
 Idea: 
 - If more than 50% of the text consists of stopwords, then compare them without stripping them.
 '''
 
+'''
 st1 = 'The anti-war coalition is working!\"'
 st2 = 'The anti-war coalition is not working'
 
 #st1 = 'We went to the pizza place and you ate no pizza at all'
 #st2 = 'I ate pizza with you yesterday at home'
 #st2 = st1
+'''
+
+st1 = 'three years later, the coffin was full of jello'
+st2 = 'the person box was filled with jelly many dozens of months later'
 
 def remove_punctuation(text):
 	no_punct=[words for words in text if words not in string.punctuation]
@@ -58,6 +65,7 @@ def tfidf(words1, words2):
 		tfidf2[w] = tf2[w] * idf[w]
 	return (tfidf1, tfidf2)
 
+'''
 def cosine_similarity(tfidf1, tfidf2):
 	v1 = list(tfidf1.values())
 	v2 = list(tfidf2.values())
@@ -76,6 +84,7 @@ def cosine_similarity(tfidf1, tfidf2):
 	if mod_v1 == 0 or mod_v2 == 0:
 		return 1
 	return v1_dot_v2 / (mod_v1 * mod_v2)
+'''
 
 def jaccard_similarity():
 	return None
@@ -85,7 +94,12 @@ def main():
 	w2 = preprocess_str(st2, False)
 	res = tfidf(w1, w2)
 	print(res[0], '\n', res[1])
-	csim = cosine_similarity(res[0], res[1])
+	#csim = cosine_similarity(res[0], res[1])
+	v1 = numpy.array(list(res[0].values()))
+	v1.reshape(-1, 1)
+	v2 = numpy.array(list(res[1].values()))
+	v2.reshape(-1, 1)
+	csim = cosine_similarity([v1], [v2])
 	print(csim)
 
 if __name__ == '__main__':

@@ -60,11 +60,16 @@ def main():
 	#Check for new reports
 	latest_rep = get_latest_report(sql_handle)
 	#Get posts created previously
-	#Run text similarity check
-	#Run image similarity check
+	prev_posts = get_previous_posts(sql_handle, latest_rep[0])
+	#Run text and image similarity checks
+	is_duplicate = False
 	#Update DB if duplicate
+	if is_duplicate:
+		mark_duplicate(sql_handle, latest_rep[0])
 	#Delete report
-	return None
+	delete_report(sql_handle, latest_rep[0])
+	#Close DB connection
+	sql_handle.close()
 
 if __name__ == '__main__':
 	main()
