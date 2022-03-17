@@ -32,10 +32,10 @@ def get_previous_posts(handle, post_id):
 	prev_posts = prev_cur.fetchall()
 	return prev_posts
 
-def check_text_similarity(text1, text2):
-	return None
+def check_text_similarity(post1, post2):
+	return text_similarity.compute(post1[1], post2[1])
 
-def check_image_similarity(image1, image2):
+def check_image_similarity(post1, post2):
 	return None
 
 def mark_duplicate(handle, post_id):
@@ -63,6 +63,7 @@ def main():
 	prev_posts = get_previous_posts(sql_handle, latest_rep[0])
 	#Run text and image similarity checks
 	is_duplicate = False
+	#TODO: Iterate through previous posts to find most similar
 	#Update DB if duplicate
 	if is_duplicate:
 		mark_duplicate(sql_handle, latest_rep[0])
