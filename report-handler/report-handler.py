@@ -19,6 +19,15 @@ def get_latest_report(handle):
 		return None
 	return latest_report[0]
 
+def get_post(handle, post_id):
+	get_cur = handle.cursor()
+	get_cur.execute('select post_id, content, has_image, creation_time from posts where post_id=%s', (post_id,))
+	post = get_cur.fetchall()
+	get_cur.close()
+	if len(post) != 1:
+		return None
+	return post[0]
+
 def get_previous_posts(handle, post_id):
 	prev_cur = handle.cursor()
 	#Get creation time of reported post
@@ -59,11 +68,19 @@ def main():
 	sql_handle = connect_db()
 	#Check for new reports
 	latest_rep = get_latest_report(sql_handle)
+	#Get reported post
+	rep_post = get_post(sql_handle, latest_rep[0])
 	#Get posts created previously
 	prev_posts = get_previous_posts(sql_handle, latest_rep[0])
-	#Run text and image similarity checks
+	#Iterate through previous posts and run similarity checks
 	is_duplicate = False
-	#TODO: Iterate through previous posts to find most similar
+	similarities = []
+	for post in prev_posts:
+		#Compute similarities
+		#Add scores to list
+		#Find post ID with highest similarity
+		#If >80, mark as repost(?)
+		continue #remove this
 	#Update DB if duplicate
 	if is_duplicate:
 		mark_duplicate(sql_handle, latest_rep[0])
