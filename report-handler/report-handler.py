@@ -79,7 +79,7 @@ def main():
 		#Compute similarities
 		#Add scores to list
 		#Find post ID with highest similarity
-		#If >80, mark as repost(?)
+		#If >80, mark as repost(temp)
 		continue #remove this
 	#Update DB if duplicate
 	if is_duplicate:
