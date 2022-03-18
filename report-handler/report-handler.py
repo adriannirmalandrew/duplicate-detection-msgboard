@@ -9,40 +9,28 @@ def connect_db():
 	sql_handle = sqlconn.connect(host = 'localhost', user = 'project', password = 'project', database = 'socialmedia')
 	return sql_handle
 
-def get_latest_report(handle):
-	latest_cur = handle.cursor()
+def get_latest_report(latest_cur):
 	latest_cur.execute('select * from reports having reported_time=max(reported_time)')
 	latest_report = latest_cur.fetchall()
-	latest_cur.close()
 	#Return none if no reports
 	if len(latest_report) == 0:
 		return None
 	return latest_report[0]
 
-def get_post(handle, post_id):
-	get_cur = handle.cursor()
+def get_post(get_cur, post_id):
 	get_cur.execute('select post_id, content, has_image, creation_time from posts where post_id=%s', (post_id,))
 	post = get_cur.fetchall()
-	get_cur.close()
 	if len(post) != 1:
 		return None
 	return post[0]
 
-def get_previous_posts(handle, post_id):
-	prev_cur = handle.cursor()
-	#Get creation time of reported post
-	prev_cur.execute('select creation_time from posts where post_id=%s', (post_id,))
-	time_res = prev_cur.fetchall()
-	if len(time_res) == 0:
-		return None
-	creation_time = time_res[0][0]
-	#Find previous posts
-	prev_cur.execute('select post_id, content, has_image from posts where post creation_time<%s and is_repost=0', (creation_time,))
-	prev_posts = prev_cur.fetchall()
-	return prev_posts
+def get_previous_posts(prev_cur, creation_time, has_image):
+	prev_cur.execute('select post_id, content, creation_time from posts where creation_time<%s and has_image=%s', (creation_time, has_image))
+	posts = prev_cur.fetchall()
+	return posts
 
-def check_text_similarity(post1, post2):
-	return text_similarity.compute(post1[1], post2[1])
+def check_text_similarity(text1, text2):
+	return text_similarity.compute(text1, text2)
 
 def check_image_similarity(post1, post2):
 	return None
@@ -66,12 +54,13 @@ def delete_report(handle, report_id):
 def main():
 	#Connect to DB
 	sql_handle = connect_db()
-	#Check for new reports
-	latest_rep = get_latest_report(sql_handle)
-	#Get reported post
-	rep_post = get_post(sql_handle, latest_rep[0])
-	#Get posts created previously
-	prev_posts = get_previous_posts(sql_handle, latest_rep[0])
+	sql_cur = sql_handle.cursor(dictionary = True)
+	#Get latest report
+	latest_rep = get_latest_report(sql_cur)
+	#Get post from latest report
+	rep_post = get_post(sql_cur, latest_rep['post_id'])
+	#Get earlier posts
+	prev_posts = get_previous_posts(sql_cur, rep_post['creation_time'], rep_post['has_image'])
 	#Iterate through previous posts and run similarity checks
 	is_duplicate = False
 	similarities = []
