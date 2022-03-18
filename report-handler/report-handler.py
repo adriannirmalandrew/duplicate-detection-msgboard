@@ -24,8 +24,8 @@ def get_post(get_cur, post_id):
 		return None
 	return post[0]
 
-def get_previous_posts(prev_cur, creation_time, has_image):
-	prev_cur.execute('select post_id, content, creation_time from posts where creation_time<%s and has_image=%s', (creation_time, has_image))
+def get_previous_posts(prev_cur, rep_post):
+	prev_cur.execute('select post_id, content, creation_time from posts where creation_time<%s and has_image=%s', (rep_post['creation_time'], rep_post['has_image']))
 	posts = prev_cur.fetchall()
 	return posts
 
@@ -37,6 +37,7 @@ def check_image_similarity(post1, post2):
 
 def mark_duplicate(handle, post_id):
 	mark_cur = handle.cursor()
+	#TODO: Add similar post's ID:
 	mark_cur.execute('update posts set is_repost=1 where post_id=%s', (post_id,))
 	marked = mark_cur.rowcount
 	handle.commit()
@@ -59,17 +60,38 @@ def main():
 	latest_rep = get_latest_report(sql_cur)
 	#Get post from latest report
 	rep_post = get_post(sql_cur, latest_rep['post_id'])
+	rep_has_image = bool(rep_post['has_image'])
 	#Get earlier posts
-	prev_posts = get_previous_posts(sql_cur, rep_post['creation_time'], rep_post['has_image'])
+	prev_posts = get_previous_posts(sql_cur, rep_post)
 	#Iterate through previous posts and run similarity checks
-	is_duplicate = False
 	similarities = []
-	for post in prev_posts:
-		#Compute similarities
-		#Add scores to list
-		#Find post ID with highest similarity
-		#If >80, mark as repost(temp)
-		continue #remove this
+	if rep_has_image:
+		for post in prev_posts:
+			text_sim = text_similarity(rep_post['content'], post['content'])
+			image_sim = image_similarity(rep_post['post_id'], post['post_id'])
+			similarities.append((post['post_id'], text_sim, image_sim))
+	else:
+		for post in prev_posts:
+			text_sim = text_similarity(rep_post['content'], post['content'])
+			similarities.append((post['post_id'], text_sim))
+	#Find post ID with highest similarity
+	highest_sim = similarities[0]
+	if rep_has_image:
+		for sim in similarities:
+			if sim[1] > highest_sim[1] and sim[2] > highest_sim[2]:
+				highest_sim = sim
+	else:
+		for sim in similarities:
+			if sim[1] > highest_sim[1]:
+				highest_sim = sim
+	#If >80, mark as repost:
+	is_duplicate = False
+	if rep_has_image:
+		if sim[1] > 0.8 or sim[2] > 0.8:
+			is_duplicate = True
+	else:
+		if sim[1] > 0.8:
+			is_duplicate = True
 	#Update DB if duplicate
 	if is_duplicate:
 		mark_duplicate(sql_handle, latest_rep[0])
