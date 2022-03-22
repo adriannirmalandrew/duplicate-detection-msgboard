@@ -35,10 +35,9 @@ def check_text_similarity(text1, text2):
 def check_image_similarity(post1, post2):
 	return None
 
-def mark_duplicate(handle, post_id):
+def mark_duplicate(handle, post_id, copied_post):
 	mark_cur = handle.cursor()
-	#TODO: Add similar post's ID:
-	mark_cur.execute('update posts set is_repost=1 where post_id=%s', (post_id,))
+	mark_cur.execute('update posts set is_repost=1, copied_post=%s where post_id=%s', (copied_post, post_id))
 	marked = mark_cur.rowcount
 	handle.commit()
 	mark_cur.close()
@@ -46,7 +45,7 @@ def mark_duplicate(handle, post_id):
 
 def delete_report(handle, report_id):
 	dup_cur = handle.cursor()
-	dup_cur.execute('delete from reports where post_id=%s', (post_id,))
+	dup_cur.execute('delete from reports where post_id=%s', (report_id,))
 	deleted = dup_cur.rowcount
 	handle.commit()
 	dup_cur.close()
@@ -94,7 +93,7 @@ def main():
 			is_duplicate = True
 	#Update DB if duplicate
 	if is_duplicate:
-		mark_duplicate(sql_handle, latest_rep[0])
+		mark_duplicate(sql_handle, latest_rep[0], highest_sim[0])
 	#Delete report
 	delete_report(sql_handle, latest_rep[0])
 	#Close DB connection
