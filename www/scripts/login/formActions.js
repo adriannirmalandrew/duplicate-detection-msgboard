@@ -11,7 +11,7 @@ function login() {
 				location.reload(true);
 			},
 			401: function(xhr) {
-				alert(xhr);
+				alert(xhr.responseText);
 			}
 		},
 		fail: function() {
@@ -44,7 +44,7 @@ function register() {
 			},
 			401: function(xhr) {
 				//Display failure message
-				alert(xhr + ": Account already exists!");
+				alert(xhr.responseText + ": Account already exists!");
 			}
 		},
 		fail: function() {
