@@ -8,4 +8,4 @@ def compute(post1, post2):
 	post_vecs = bert.encode([post1, post2])
 	#Compute cosine similarity
 	sim = cosine_similarity([post_vecs[0]], [post_vecs[1]])
-	return sim[0]
+	return sim[0][0]

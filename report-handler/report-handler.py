@@ -10,7 +10,15 @@ def connect_db():
 	return sql_handle
 
 def get_latest_report(latest_cur):
-	latest_cur.execute('select * from reports having reported_time=max(reported_time)')
+	#Get latest report's timestamp
+	latest_cur.execute('select max(reported_time) from reports')
+	rep_time_res = latest_cur.fetchall()
+	if len(rep_time_res) == 0:
+		return None
+	latest_rep_time = rep_time_res[0]
+	#print(latest_rep_time)
+	#Get corresponding report
+	latest_cur.execute('select * from reports where reported_time=%s', (latest_rep_time['max(reported_time)'],))
 	latest_report = latest_cur.fetchall()
 	#Return none if no reports
 	if len(latest_report) == 0:
@@ -55,24 +63,31 @@ def main():
 	#Connect to DB
 	sql_handle = connect_db()
 	sql_cur = sql_handle.cursor(dictionary = True)
+	print('Connected to DB')
 	#Get latest report
 	latest_rep = get_latest_report(sql_cur)
+	if latest_rep is None:
+		print('No reports.')
+		return None
+	print('Latest Report:', latest_rep)
 	#Get post from latest report
 	rep_post = get_post(sql_cur, latest_rep['post_id'])
 	rep_has_image = bool(rep_post['has_image'])
+	print('Reported Post: ' + str(rep_post['post_id']) + ', Has image?: ' + str(rep_has_image))
 	#Get earlier posts
 	prev_posts = get_previous_posts(sql_cur, rep_post)
 	#Iterate through previous posts and run similarity checks
 	similarities = []
 	if rep_has_image:
 		for post in prev_posts:
-			text_sim = text_similarity(rep_post['content'], post['content'])
-			image_sim = image_similarity(rep_post['post_id'], post['post_id'])
+			text_sim = check_text_similarity(rep_post['content'], post['content'])
+			image_sim = check_image_similarity(rep_post['post_id'], post['post_id'])
 			similarities.append((post['post_id'], text_sim, image_sim))
 	else:
 		for post in prev_posts:
-			text_sim = text_similarity(rep_post['content'], post['content'])
+			text_sim = check_text_similarity(rep_post['content'], post['content'])
 			similarities.append((post['post_id'], text_sim))
+	print('Similarities to older posts:', similarities)
 	#Find post ID with highest similarity
 	highest_sim = similarities[0]
 	if rep_has_image:
@@ -83,6 +98,7 @@ def main():
 		for sim in similarities:
 			if sim[1] > highest_sim[1]:
 				highest_sim = sim
+	print('Most similar post: ' + highest_sim[0])
 	#If >80, mark as repost:
 	is_duplicate = False
 	if rep_has_image:
@@ -91,11 +107,14 @@ def main():
 	else:
 		if sim[1] > 0.8:
 			is_duplicate = True
+	print('Is repost?: ' + str(is_duplicate))
 	#Update DB if duplicate
 	if is_duplicate:
-		mark_duplicate(sql_handle, latest_rep[0], highest_sim[0])
+		mark_duplicate(sql_handle, latest_rep['post_id'], highest_sim[0])
+		print('Duplicate post marked')
 	#Delete report
-	delete_report(sql_handle, latest_rep[0])
+	delete_report(sql_handle, latest_rep['post_id'])
+	print('Report deleted')
 	#Close DB connection
 	sql_handle.close()
 
