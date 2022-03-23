@@ -8,7 +8,7 @@ def upload(handle, username, content, has_image):
 	post_id = str(creation_time) + username
 	#Insert into DB
 	upload_cur = handle.cursor()
-	upload_cur.execute('insert into posts values(%s, %s, %s, %s, %s, %s)', (post_id, username, creation_time, content, int(has_image), 0))
+	upload_cur.execute('insert into posts values(%s, %s, %s, %s, %s, %s, %s)', (post_id, username, creation_time, content, int(has_image), 0, 'none'))
 	uploaded = upload_cur.rowcount
 	handle.commit()
 	upload_cur.close()

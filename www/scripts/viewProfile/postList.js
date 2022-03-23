@@ -35,6 +35,7 @@ function getPostList(creator) {
 }
 
 $(document).ready(function() {
-	let creatorName = Cookies.get("username");
+	let urlParams = new URLSearchParams(window.location.search);
+	let creatorName = urlParams.get("user");
 	getPostList(creatorName);
 });
