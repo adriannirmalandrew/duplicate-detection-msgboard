@@ -205,38 +205,6 @@ def report_post():
 		return make_response('Report Creation Failed!', 500)
 	return make_response('Report Sent', 200)
 
-## Comment actions: Get, Add, Delete
-@server.route('/getComments', methods = ['GET'])
-def get_comments():
-	#TODO
-	return None
-
-@server.route('/addComment', methods = ['POST'])
-def add_comment():
-	#TODO
-	return None
-
-@server.route('/deleteComment', methods = ['POST'])
-def delete_comment():
-	#TODO
-	return None
-
-## Follow actions: GetFollowed, Follow, Unfollow
-@server.route('/getFollowed', methods = ['GET'])
-def get_followed():
-	#TODO
-	return None
-
-@server.route('/followUser', methods = ['POST'])
-def follow_user():
-	#TODO
-	return None
-
-@server.route('/unfollowUser', methods = ['POST'])
-def unfollow_user():
-	#TODO
-	return None
-
 ## Admin actions: SuspendUser, BanUser
 @server.route('/suspendUser', methods = ['POST'])
 def suspend_user():
