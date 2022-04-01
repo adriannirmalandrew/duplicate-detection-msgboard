@@ -23,6 +23,14 @@ function showPostActions(postJson) {
 	});
 }
 
+function showRepostWarning(postJson) {
+	//Show banner and copied post's ID
+	let postDuplicateDiv = $("#post-duplicate-div");
+	postDuplicateDiv.attr("hidden", false);
+	let copiedPostMsg = $("#copied-post-message");
+	copiedPostMsg.html(copiedPostMsg.html() + postJson["copied_post"]);
+}
+
 function displayPostData(postJson) {
 	//Show post ID and author
 	let postTitle = $("#post-display-title");
@@ -41,6 +49,10 @@ function displayPostData(postJson) {
 	}
 	//Show post actions if logged in:
 	showPostActions(postJson);
+	//Check if post is a duplicate:
+	if(postJson["is_repost"] == 1) {
+		showRepostWarning(postJson);
+	}
 }
 
 function getPostData(postId) {
@@ -56,10 +68,6 @@ function getPostData(postId) {
 			}
 		},
 	});
-}
-
-function getComments() {
-	//TODO
 }
 
 $(document).ready(function() {
