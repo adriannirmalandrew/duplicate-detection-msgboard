@@ -34,8 +34,14 @@ function getPostList(creator) {
 	});
 }
 
+function setProfileName(userName) {
+	let headerTitle = $("#header-title");
+	headerTitle.html(headerTitle.html() + userName);
+}
+
 $(document).ready(function() {
 	let urlParams = new URLSearchParams(window.location.search);
 	let creatorName = urlParams.get("user");
 	getPostList(creatorName);
+	setProfileName(creatorName);
 });

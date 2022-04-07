@@ -1,0 +1,13 @@
+body, #post-list-div {
+	margin: 1%;
+}
+
+#header-div, #post-list-div {
+	width: 70%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#header-div {
+	text-align: center;
+}
