@@ -1,0 +1,16 @@
+body, #post-duplicate-div, #post-display-div, #post-actions-div {
+	margin: 1%;
+}
+
+#post-duplicate-div, #post-display-div, #post-actions-div {
+	width: 70%;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+#post-duplicate-div {
+	background: red;
+	color: white;
+	padding: 0.5%;
+}
