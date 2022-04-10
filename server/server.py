@@ -4,7 +4,7 @@ import os
 import mysql.connector as sqlconn
 from flask import Flask, request, make_response, Response
 from werkzeug.utils import secure_filename
-import actions.user, actions.post
+import actions.user, actions.post, actions.similarity
 
 ## Server setup:
 server = Flask(__name__)
@@ -213,6 +213,12 @@ def suspend_user():
 
 @server.route('/banUser', methods = ['POST'])
 def ban_user():
+	#TODO
+	return None
+
+## Comparing typed content to earlier posts in real-time
+@server.route('/getMostSimilarPost', methods = ['GET'])
+def get_most_similar_post():
 	#TODO
 	return None
 
