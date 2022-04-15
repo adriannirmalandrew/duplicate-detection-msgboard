@@ -29,9 +29,15 @@ def get_trending_topics():
 	driver.close()
 	return topics
 
+# Return most trending topic that a post contains
+def contains_topic_text(post_text, topics):
+	for t in topics:
+		if t in post_text:
+			return t
+	return None
+
 # Get tweets associated with trending topics
 def get_tweets_from_topic(handle, topics):
-	#Search for tweets for each trend using tweepy
 	return None
 
 # Compare post's text to tweets
