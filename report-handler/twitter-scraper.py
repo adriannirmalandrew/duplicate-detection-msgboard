@@ -37,20 +37,32 @@ def contains_topic_text(post_text, topics):
 	return None
 
 # Get tweets associated with trending topics
-def get_tweets_from_topic(handle, topics):
-	return None
+def get_tweets_from_topic(handle, topic):
+	results = handle.search_recent_tweets(query = topic, max_results = 15)
+	return results
 
 # Compare post's text to tweets
 def compare_posts(post_text, tweets):
 	return None
 
 def main():
+	#TEST post text
+	post_text = ''
 	#Get trending topics
 	trending_topics = get_trending_topics()
 	print(trending_topics)
-	#Search for related tweets
+	#Check if post contains a topic
+	contained_topic = contains_topic_text(post_text, trending_topics)
+	if contained_topic is None:
+		print('No trending topic detected')
+		return
+	#Create Tweepy handle
 	global bearer_token
 	tweepy_handle = create_tweepy_handle(bearer_token)
+	#Get search results
+	trending_tweets = get_tweets_from_topic(tweepy_handle, contained_topic)
+	#Compare post's similarity to each tweet
+	#TODO
 
 if __name__ == '__main__':
 	main()
