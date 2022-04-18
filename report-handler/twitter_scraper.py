@@ -5,6 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import tweepy
 import text_similarity
+import report_handler
 
 api_key = '255aKwPl9tlqpbTIWTA8YAswf'
 api_key_secret = '6MRd4l6tLpueXmuVB1xusGNmldlE1Qx63jSHAwaOYjoxf3XlqM'
