@@ -38,7 +38,8 @@ def get_previous_posts(prev_cur, rep_post):
 	return posts
 
 def check_text_similarity(text1, text2):
-	return text_similarity.compute(text1, text2)
+	bert_model = text_similarity.init_model()
+	return text_similarity.compute(bert_model, text1, text2)
 
 def check_image_similarity(post1, post2):
 	return None
@@ -76,6 +77,8 @@ def main():
 	print('Reported Post: ' + str(rep_post['post_id']) + ', Has image?: ' + str(rep_has_image))
 	#Get earlier posts
 	prev_posts = get_previous_posts(sql_cur, rep_post)
+	#Initialize BERT model
+	text_similarity.init_model()
 	#Iterate through previous posts and run similarity checks
 	similarities = []
 	if rep_has_image:
