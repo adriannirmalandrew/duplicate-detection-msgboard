@@ -42,7 +42,7 @@ def contains_topic_text(post_text, topics):
 
 # Get tweets associated with trending topics
 def get_tweets_from_topic(handle, topic):
-	results = handle.search_recent_tweets(query = topic, max_results = 15)
+	results = handle.search_recent_tweets(query = topic, max_results = 30)
 	return results.data
 
 # Compare post's text to tweets and return similarity
