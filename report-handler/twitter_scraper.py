@@ -2,6 +2,7 @@
 # This program is to test the Twitter APIs functionality
 
 from time import sleep
+from string import punctuation as punct
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import tweepy
@@ -35,6 +36,9 @@ def get_trending_topics():
 
 # Return most trending topic that a post contains
 def contains_topic_text(post_text, topics):
+	#Remove all punctuation
+	post_text = post_text.translate(str.maketrans('', '', punct))
+	#Check if topic is contained
 	for t in topics:
 		if t in post_text:
 			return t

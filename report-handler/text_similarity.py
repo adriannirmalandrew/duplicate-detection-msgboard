@@ -10,8 +10,10 @@ def compute(model, post1, post2):
 	vec = TfidfVectorizer()
 	X = vec.fit_transform([post1, post2]).toarray()
 	sim = cosine_similarity([X[0]], [X[1]])
-	#Create BERT encodings
-	post_vecs = model.encode([post1, post2])
-	#Compute cosine similarity
-	sim = cosine_similarity([post_vecs[0]], [post_vecs[1]])
-	return sim[0][0]
+	if sim > 0.5:
+		#Create BERT encodings
+		post_vecs = model.encode([post1, post2])
+		#Compute cosine similarity
+		sim = cosine_similarity([post_vecs[0]], [post_vecs[1]])
+		return sim[0][0]
+	return 0

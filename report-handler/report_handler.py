@@ -3,7 +3,6 @@
 import mysql.connector as sqlconn
 
 import text_similarity
-import image_similarity
 
 def connect_db():
 	sql_handle = sqlconn.connect(host = 'localhost', user = 'project', password = 'project', database = 'socialmedia')
@@ -40,9 +39,6 @@ def get_previous_posts(prev_cur, rep_post):
 def check_text_similarity(text1, text2):
 	bert_model = text_similarity.init_model()
 	return text_similarity.compute(bert_model, text1, text2)
-
-def check_image_similarity(post1, post2):
-	return None
 
 def mark_duplicate(handle, post_id, copied_post):
 	mark_cur = handle.cursor()
