@@ -219,14 +219,14 @@ def ban_user():
 '''
 
 ## Get trending topics and tweets containing them
-@server.route('/getTrendsAndSentiments', methods = ['GET'])
-def get_trends_and_sentiments():
+@server.route('/twitterGetTrendsAndSentiments', methods = ['GET'])
+def twitter_get_trends_and_sentiments():
 	#TODO: Return trending topics and the sentiments associated with them
 	#This URL should be called when the page is loaded
 	return None
 
-@server.route('/getSimilarPosts', methods = ['GET'])
-def get_similar_posts():
+@server.route('/twitterGetSimilarPosts', methods = ['GET'])
+def twitter_get_similar_posts():
 	#TODO: Get posts most similar to user's posts
 	return None
 
