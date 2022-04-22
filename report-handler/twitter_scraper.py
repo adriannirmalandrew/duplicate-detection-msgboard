@@ -36,12 +36,17 @@ def get_trending_topics():
 
 # Return most trending topic that a post contains
 def contains_topic_text(post_text, topics):
-	#Remove all punctuation
-	post_text = post_text.translate(str.maketrans('', '', punct))
+	#Remove all punctuation from post
+	post_text = post_text.translate(str.maketrans('', '', punct)).strip().lower()
+	print(post_text)
 	#Check if topic is contained
-	for t in topics:
-		if t in post_text:
-			return t
+	for topic in topics:
+		#Remove punctuation from topic text
+		topic = topic.translate(str.maketrans('', '', punct)).strip().lower()
+		print(topic)
+		#Check if topic is contained
+		if topic in post_text:
+			return topic
 	return None
 
 # Get tweets associated with trending topics
