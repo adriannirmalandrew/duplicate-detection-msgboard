@@ -4,7 +4,7 @@ import os
 import mysql.connector as sqlconn
 from flask import Flask, request, make_response, Response
 from werkzeug.utils import secure_filename
-import actions.user, actions.post, actions.similarity
+import actions.user, actions.post, actions.analysis
 
 ## Server setup:
 server = Flask(__name__)
@@ -205,6 +205,7 @@ def report_post():
 		return make_response('Report Creation Failed!', 500)
 	return make_response('Report Sent', 200)
 
+'''
 ## Admin actions: SuspendUser, BanUser
 @server.route('/suspendUser', methods = ['POST'])
 def suspend_user():
@@ -215,11 +216,17 @@ def suspend_user():
 def ban_user():
 	#TODO
 	return None
+'''
 
-## Comparing typed content to earlier posts in real-time
-@server.route('/getMostSimilarPost', methods = ['GET'])
-def get_most_similar_post():
-	#TODO
+## Get trending topics and tweets containing them
+@server.route('/getTrendsAndSentiments', methods = ['GET'])
+def get_trends_and_sentiments():
+	#TODO: Return trending topics and the sentiments associated with them
+	return None
+
+@server.route('/getSimilarPosts', methods = ['GET'])
+def get_similar_posts():
+	#TODO: Get posts most similar to user's posts
 	return None
 
 ## Main method:
