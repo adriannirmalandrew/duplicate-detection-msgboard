@@ -15,7 +15,7 @@ def _get_trending_topics():
 	#Open firefox webdriver
 	driver = webdriver.Firefox()
 	driver.get('https://twitter.com/explore/tabs/trending')
-	sleep(10)
+	sleep(5)
 	#Get span elements with topic names
 	topic_xpath = '//div[@class=\'css-901oao r-18jsvk2 r-37j5jr r-a023e6 r-b88u0q r-rjixqe r-1bymd8e r-bcqeeo r-qvutc0\']'
 	topic_elements = driver.find_elements(By.XPATH, topic_xpath)
@@ -53,9 +53,9 @@ def trends_and_sentiments():
 		for s in trend_sentiment.keys():
 			trend_sentiment[s] /= tw_res_count
 		#Add to topic_tw_smt
-		#TODO
+		topic_tw_smt[trend] = trend_sentiment
 	#Return in JSON format
-	return None
+	return json.dumps(topic_tw_smt)
 
 # Get posts most similar to user's input
 def similar_posts():

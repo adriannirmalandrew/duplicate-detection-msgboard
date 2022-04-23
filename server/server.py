@@ -205,19 +205,6 @@ def report_post():
 		return make_response('Report Creation Failed!', 500)
 	return make_response('Report Sent', 200)
 
-'''
-## Admin actions: SuspendUser, BanUser
-@server.route('/suspendUser', methods = ['POST'])
-def suspend_user():
-	#TODO
-	return None
-
-@server.route('/banUser', methods = ['POST'])
-def ban_user():
-	#TODO
-	return None
-'''
-
 ## Get trending topics and tweets containing them
 @server.route('/twitterGetTrendsAndSentiments', methods = ['GET'])
 def twitter_get_trends_and_sentiments():
