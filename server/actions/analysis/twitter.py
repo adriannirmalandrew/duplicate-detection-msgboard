@@ -3,6 +3,7 @@
 import tweepy
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from time import sleep
 import json
 from common import compute_sentiment, compute_similarity
 
@@ -15,7 +16,7 @@ def _get_trending_topics():
 	#Open firefox webdriver
 	driver = webdriver.Firefox()
 	driver.get('https://twitter.com/explore/tabs/trending')
-	sleep(5)
+	sleep(10)
 	#Get span elements with topic names
 	topic_xpath = '//div[@class=\'css-901oao r-18jsvk2 r-37j5jr r-a023e6 r-b88u0q r-rjixqe r-1bymd8e r-bcqeeo r-qvutc0\']'
 	topic_elements = driver.find_elements(By.XPATH, topic_xpath)
