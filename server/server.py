@@ -1,15 +1,21 @@
 #!/usr/bin/python
-
+## Essentials
 import os
 import mysql.connector as sqlconn
 from flask import Flask, request, make_response, Response
 from werkzeug.utils import secure_filename
+## Backend functionality
 import actions.user, actions.post, actions.analysis.twitter, actions.analysis.common
+## Sentiment processing
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 ## Server setup:
 server = Flask(__name__)
 server.config['MAX_CONTENT_LENGTH'] = 5120 * 1024
 sql_handle = None
+## Sentiment processing modules
+smt_tokenizer = AutoTokenizer.from_pretrained('nlptown/bert-base-multilingual-uncased-sentiment')
+smt_model = AutoModelForSequenceClassification.from_pretrained('nlptown/bert-base-multilingual-uncased-sentiment')
 
 @server.before_first_request
 def connect_db():
@@ -220,7 +226,7 @@ def twitter_get_similar_posts():
 
 ## Compute sentiment of new post:
 @server.route('/computePostSentiment', methods = ['GET'])
-def new_post_sentiment():
+def compute_post_sentiment():
 	#TODO: Call sentiment computation function to rate user's new post
 	#Use function "compute_sentiment" in actions.analysis.common
 	return None

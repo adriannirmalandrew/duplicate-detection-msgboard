@@ -33,7 +33,7 @@ def _get_topic_tweets(topic, res_count):
 
 ## Backend handler methods
 # Get trending topics+tweets and perform sentiment analysis
-def trends_and_sentiments():
+def trends_and_sentiments(tokenizer, model):
 	#Number of results from Twitter
 	tw_res_count = 20
 	#Get trends using Selenium
@@ -47,7 +47,7 @@ def trends_and_sentiments():
 		#Perform sentiment analysis on each one
 		trend_sentiment = {'positive': 0, 'neutral': 0, 'negative': 0}
 		for tweet in trend_tweets:
-			temp_smt = compute_sentiment(tweet) #TEST THIS SEPARATELY
+			temp_smt = compute_sentiment(tokenizer, model, tweet) #TEST THIS SEPARATELY
 			trend_sentiment[temp_smt] += 1
 		#Convert sentiment counts to percentages
 		for s in trend_sentiment.keys():
