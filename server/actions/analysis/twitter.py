@@ -4,7 +4,9 @@ import tweepy
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from time import sleep
+import re
 import json
+
 from common import compute_sentiment, compute_similarity
 
 # Twitter API Bearer Token
@@ -32,6 +34,14 @@ def _get_topic_tweets(topic, res_count):
 	results = tw_client.search_recent_tweets(query = topic, max_results = res_count)
 	return results.data
 
+# Clean up tweet text
+def clean_tweet(text):
+	text = re.sub(r'@[A-Za-z0-9]+', '', text)
+	text = re.sub(r'#', '', text)
+	text = re.sub(r'RT[\s]+', '', text)
+	text = re.sub(r'https?:\/\/S+', '', text)
+	return text
+
 ## Backend handler methods
 # Get trending topics+tweets and perform sentiment analysis
 def trends_and_sentiments(tokenizer, model):
@@ -47,8 +57,9 @@ def trends_and_sentiments(tokenizer, model):
 		trend_tweets = _get_topic_tweets(trend, tw_res_count)
 		#Perform sentiment analysis on each one
 		trend_sentiment = {'positive': 0, 'neutral': 0, 'negative': 0}
-		for tweet in trend_tweets:
-			temp_smt = compute_sentiment(tokenizer, model, tweet) #REWORK THIS PART
+		for tweet_obj in trend_tweets:
+			tweet = clean_tweet(tweet_obj.text)
+			temp_smt = compute_sentiment(tokenizer, model, tweet)
 			trend_sentiment[temp_smt] += 1
 		#Convert sentiment counts to percentages
 		for s in trend_sentiment.keys():
