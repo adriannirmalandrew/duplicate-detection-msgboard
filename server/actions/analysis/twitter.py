@@ -39,7 +39,7 @@ def trends_and_sentiments():
 	#Get trends using Selenium
 	trends = _get_trending_topics()
 	#For each trending topic
-	topic_tw_smt = {}	#Format = {topic: {tweets: [...], sentiment: {positive: , neutral: , negative: }}, ...}
+	topic_tw_smt = {}	#Format = {<topicname>: {positive: <val>, neutral: <val>, negative: <val>}, ...}
 	for trend in trends:
 		tweet_sentiment = []
 		#Get trending tweets using Tweepy

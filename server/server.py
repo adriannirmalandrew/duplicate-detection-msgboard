@@ -4,7 +4,7 @@ import os
 import mysql.connector as sqlconn
 from flask import Flask, request, make_response, Response
 from werkzeug.utils import secure_filename
-import actions.user, actions.post, actions.analysis.twitter
+import actions.user, actions.post, actions.analysis.twitter, actions.analysis.common
 
 ## Server setup:
 server = Flask(__name__)
@@ -229,6 +229,13 @@ def twitter_get_trends_and_sentiments():
 @server.route('/twitterGetSimilarPosts', methods = ['GET'])
 def twitter_get_similar_posts():
 	#TODO: Get posts most similar to user's posts
+	return None
+
+## Compute sentiment of new post:
+@server.route('/computePostSentiment', methods = ['GET'])
+def new_post_sentiment():
+	#TODO: Call sentiment computation function to rate user's new post
+	#Use function "compute_sentiment" in actions.analysis.common
 	return None
 
 ## Main method:
