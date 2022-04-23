@@ -7,7 +7,7 @@ from time import sleep
 import re
 import json
 
-from common import compute_sentiment, compute_similarity
+from actions.analysis.common import compute_sentiment, compute_similarity
 
 # Twitter API Bearer Token
 _twitter_bearer_token = 'AAAAAAAAAAAAAAAAAAAAAAsjbAEAAAAAk3hZtpkx6NK3QEPLwWOOpVIorPo%3DgXNzITXUqvqLcRwFFT6QSn5MoZBuEPBsgNo5TG216EMTMiKwL7'

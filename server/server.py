@@ -214,10 +214,9 @@ def report_post():
 ## Get trending topics and tweets containing them
 @server.route('/twitterGetTrendsAndSentiments', methods = ['GET'])
 def twitter_get_trends_and_sentiments():
-	#TODO: Return trending topics and the sentiments associated with them
 	#This URL should be called when the page is loaded
-	#Use function "trends_and_sentiments" in actions.analysis.twitter
-	return None
+	twitter_tns = actions.analysis.twitter.trends_and_sentiments(smt_tokenizer, smt_model)
+	return Response(twitter_tns, 200, mimetype = 'application/json')
 
 @server.route('/twitterGetSimilarPosts', methods = ['GET'])
 def twitter_get_similar_posts():
