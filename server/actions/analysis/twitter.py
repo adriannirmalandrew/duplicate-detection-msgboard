@@ -1,7 +1,10 @@
 ## Functions to analyze a post being created by a user
 
+import tweepy
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+import json
+from common import compute_sentiment, compute_similarity
 
 # Twitter API Bearer Token
 _twitter_bearer_token = 'AAAAAAAAAAAAAAAAAAAAAAsjbAEAAAAAk3hZtpkx6NK3QEPLwWOOpVIorPo%3DgXNzITXUqvqLcRwFFT6QSn5MoZBuEPBsgNo5TG216EMTMiKwL7'
@@ -24,25 +27,34 @@ def _get_trending_topics():
 
 # Get trending tweets using Tweepy
 def _get_topic_tweets(topic, res_count):
-	results = handle.search_recent_tweets(query = topic, max_results = res_count)
+	tw_client = tweepy.Client(_twitter_bearer_token)
+	results = tw_client.search_recent_tweets(query = topic, max_results = res_count)
 	return results.data
-
-# Perform sentiment analysis on a list of tweets
-def _tweets_sentiments(tweets):
-	return None
-
-## Post similarity helper methods
-# Find most similar tweets from a list
-def _most_similar_tweets():
-	return None
 
 ## Backend handler methods
 # Get trending topics+tweets and perform sentiment analysis
 def trends_and_sentiments():
+	#Number of results from Twitter
+	tw_res_count = 20
 	#Get trends using Selenium
 	trends = _get_trending_topics()
-	#Get trending tweets using Tweepy
-	#Perform sentiment analysis
+	#For each trending topic
+	topic_tw_smt = {}	#Format = {topic: {tweets: [...], sentiment: {positive: , neutral: , negative: }}, ...}
+	for trend in trends:
+		tweet_sentiment = []
+		#Get trending tweets using Tweepy
+		trend_tweets = _get_topic_tweets(trend, tw_res_count)
+		#Perform sentiment analysis on each one
+		trend_sentiment = {'positive': 0, 'neutral': 0, 'negative': 0}
+		for tweet in trend_tweets:
+			temp_smt = compute_sentiment(tweet) #TEST THIS SEPARATELY
+			trend_sentiment[temp_smt] += 1
+		#Convert sentiment counts to percentages
+		for s in trend_sentiment.keys():
+			trend_sentiment[s] /= tw_res_count
+		#Add to topic_tw_smt
+		#TODO
+	#Return in JSON format
 	return None
 
 # Get posts most similar to user's input

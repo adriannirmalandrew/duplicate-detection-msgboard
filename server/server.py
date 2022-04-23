@@ -4,7 +4,7 @@ import os
 import mysql.connector as sqlconn
 from flask import Flask, request, make_response, Response
 from werkzeug.utils import secure_filename
-import actions.user, actions.post, actions.analysis_twitter
+import actions.user, actions.post, actions.analysis.twitter
 
 ## Server setup:
 server = Flask(__name__)
@@ -223,6 +223,7 @@ def ban_user():
 def twitter_get_trends_and_sentiments():
 	#TODO: Return trending topics and the sentiments associated with them
 	#This URL should be called when the page is loaded
+	#Use function "trends_and_sentiments" in actions.analysis.twitter
 	return None
 
 @server.route('/twitterGetSimilarPosts', methods = ['GET'])
