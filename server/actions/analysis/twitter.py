@@ -4,7 +4,6 @@ import tweepy
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from time import sleep
-import re
 import json
 
 from actions.analysis.common import compute_sentiment, compute_similarity, clean_post

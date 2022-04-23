@@ -1,5 +1,6 @@
 ## This module defines common functions for sentiment and similarity analysis
 import torch
+import re
 
 # Clean up post text
 def clean_post(text):

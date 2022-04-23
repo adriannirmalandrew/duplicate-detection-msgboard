@@ -226,9 +226,9 @@ def twitter_get_similar_posts():
 ## Compute sentiment of new post:
 @server.route('/computePostSentiment', methods = ['GET'])
 def compute_post_sentiment():
-	#TODO: Call sentiment computation function to rate user's new post
-	#Use function "compute_sentiment" in actions.analysis.common
-	return None
+	post_text = request.args['content']
+	sentiment_res = actions.analysis.common.compute_sentiment(smt_tokenizer, smt_model, post_text)
+	return make_response(sentiment_res, 200)
 
 ## Main method:
 def main():
