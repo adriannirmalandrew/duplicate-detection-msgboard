@@ -218,9 +218,15 @@ def twitter_get_trends_and_sentiments():
 	twitter_tns = actions.analysis.twitter.trends_and_sentiments(smt_tokenizer, smt_model)
 	return Response(twitter_tns, 200, mimetype = 'application/json')
 
+## Find posts similar to the user's new post
 @server.route('/twitterGetSimilarPosts', methods = ['GET'])
 def twitter_get_similar_posts():
-	#TODO: Get posts most similar to user's posts
+	#TODO: Get posts most similar to user's posts from Twitter
+	return None
+
+@server.route('/localGetSimilarPosts', methods = ['GET'])
+def local_get_similar_posts():
+	#TODO: Get posts most similar to user's posts from local DB
 	return None
 
 ## Compute sentiment of new post:
