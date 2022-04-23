@@ -7,7 +7,7 @@ from time import sleep
 import re
 import json
 
-from actions.analysis.common import compute_sentiment, compute_similarity
+from actions.analysis.common import compute_sentiment, compute_similarity, clean_post
 
 # Twitter API Bearer Token
 _twitter_bearer_token = 'AAAAAAAAAAAAAAAAAAAAAAsjbAEAAAAAk3hZtpkx6NK3QEPLwWOOpVIorPo%3DgXNzITXUqvqLcRwFFT6QSn5MoZBuEPBsgNo5TG216EMTMiKwL7'
@@ -34,14 +34,6 @@ def _get_topic_tweets(topic, res_count):
 	results = tw_client.search_recent_tweets(query = topic, max_results = res_count)
 	return results.data
 
-# Clean up tweet text
-def clean_tweet(text):
-	text = re.sub(r'@[A-Za-z0-9]+', '', text)
-	text = re.sub(r'#', '', text)
-	text = re.sub(r'RT[\s]+', '', text)
-	text = re.sub(r'https?:\/\/S+', '', text)
-	return text
-
 ## Backend handler methods
 # Get trending topics+tweets and perform sentiment analysis
 def trends_and_sentiments(tokenizer, model):
@@ -58,7 +50,7 @@ def trends_and_sentiments(tokenizer, model):
 		#Perform sentiment analysis on each one
 		trend_sentiment = {'positive': 0, 'neutral': 0, 'negative': 0}
 		for tweet_obj in trend_tweets:
-			tweet = clean_tweet(tweet_obj.text)
+			tweet = clean_post(tweet_obj.text)
 			temp_smt = compute_sentiment(tokenizer, model, tweet)
 			trend_sentiment[temp_smt] += 1
 		#Convert sentiment counts to percentages
