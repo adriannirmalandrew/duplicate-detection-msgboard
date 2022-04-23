@@ -3,6 +3,7 @@ import torch
 
 # Determine sentiment in the given text and return 'positive', 'neutral', or 'negative'
 def compute_sentiment(tokenizer, model, post_text):
+	#REWORK THIS FULLY USING NEW MODEL
 	#Designed to work using nlptown/bert-base-multilingual-uncased-sentiment
 	tokens = tokenizer.encode(post_text, return_tensors='pt')
 	result = model(tokens)

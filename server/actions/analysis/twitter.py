@@ -48,7 +48,7 @@ def trends_and_sentiments(tokenizer, model):
 		#Perform sentiment analysis on each one
 		trend_sentiment = {'positive': 0, 'neutral': 0, 'negative': 0}
 		for tweet in trend_tweets:
-			temp_smt = compute_sentiment(tokenizer, model, tweet) #TEST THIS SEPARATELY
+			temp_smt = compute_sentiment(tokenizer, model, tweet) #REWORK THIS PART
 			trend_sentiment[temp_smt] += 1
 		#Convert sentiment counts to percentages
 		for s in trend_sentiment.keys():
