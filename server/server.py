@@ -236,9 +236,5 @@ def compute_post_sentiment():
 	sentiment_res = actions.analysis.common.compute_sentiment(smt_tokenizer, smt_model, post_text)
 	return make_response(sentiment_res, 200)
 
-## Main method:
-def main():
-	server.run()
-
 if __name__ == '__main__':
-	main()
+	server.run()

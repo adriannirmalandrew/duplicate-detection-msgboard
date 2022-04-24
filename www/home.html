@@ -42,7 +42,7 @@
 				<label for="new-post-image">Image:</label>
 				<input id="new-post-image" name="image" type="file" accept="image/*"><br>
 			</div>
-			<input id="new-post-sentiment" type="hidden" name="sentiment">
+			<input id="new-post-sentiment" type="hidden" name="sentiment" value="">
 			<input type="submit" value="Create Post" onclick="uploadPost()" class="btn btn-primary">
 		</form>
 	</div>
@@ -50,14 +50,20 @@
 	<div id="new-post-analysis-div">
 		<h4>New Post Analysis (WIP)</h4>
 		<div id="analytics-loading-message-div">Loading...</div>
-		<div id="twitter-trends-sentiments-div" hidden="true">
+		<div id="twitter-sentiments-div" hidden="true">
 			<h4>Matching Twitter Trends</h4>
+			<div id="twitter-sentiments-list">
+				<!--List of Twitter trends and the sentiments-->
+			</div>
 		</div>
-		<div id="matching-twitter-posts-div" hidden="true">
-			<h4>Similar Posts on Twitter</h4>
-		</div>
-		<div id="matching-local-posts-div" hidden="true">
-			<h4>Similar Posts on Local Site</h4>
+		<div id="matching-posts-div">
+			<div id="matching-twitter-posts-div" hidden="true">
+				<h4>Similar Posts on Twitter</h4>
+			</div>
+			<div id="matching-local-posts-div" hidden="true">
+				<h4>Similar Posts on Local Site</h4>
+			</div>
+			<button class="btn btn-sm btn-primary" onclick="actionGetSimilarPosts()">Find Similar Posts</button>
 		</div>
 	</div>
 	<!--Display list of all users-->
