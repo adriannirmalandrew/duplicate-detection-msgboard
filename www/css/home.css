@@ -1,8 +1,8 @@
-body, #create-post-div, #user-list-div {
+body, #create-post-div, #user-list-div, #new-post-analysis-div {
 	margin: 1%;
 }
 
-#header-div, #create-post-div, #user-list-div {
+#header-div, #create-post-div, #user-list-div, #new-post-analysis-div {
 	width: 70%;
 	margin-left: auto;
 	margin-right: auto;

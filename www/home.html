@@ -9,7 +9,7 @@
 	<script src="/scripts/home/logoutHandler.js"></script>
 	<script src="/scripts/home/postCreation.js"></script>
 	<script src="/scripts/home/userList.js"></script>
-	<script src="/scrips/home/postAnalysis.js"></script>
+	<script src="/scripts/home/postAnalysis.js"></script>
 	<!--DataTables functionality-->
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
 	<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
@@ -42,12 +42,23 @@
 				<label for="new-post-image">Image:</label>
 				<input id="new-post-image" name="image" type="file" accept="image/*"><br>
 			</div>
+			<input id="new-post-sentiment" type="hidden" name="sentiment">
 			<input type="submit" value="Create Post" onclick="uploadPost()" class="btn btn-primary">
 		</form>
 	</div>
 	<!--Analysis controls for post being created-->
 	<div id="new-post-analysis-div">
 		<h4>New Post Analysis (WIP)</h4>
+		<div id="analytics-loading-message-div">Loading...</div>
+		<div id="twitter-trends-sentiments-div" hidden="true">
+			<h4>Matching Twitter Trends</h4>
+		</div>
+		<div id="matching-twitter-posts-div" hidden="true">
+			<h4>Similar Posts on Twitter</h4>
+		</div>
+		<div id="matching-local-posts-div" hidden="true">
+			<h4>Similar Posts on Local Site</h4>
+		</div>
 	</div>
 	<!--Display list of all users-->
 	<div id="user-list-div">
