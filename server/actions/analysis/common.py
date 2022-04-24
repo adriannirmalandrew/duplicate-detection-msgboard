@@ -8,7 +8,8 @@ def clean_post(text):
 	text = re.sub(r'#', '', text)
 	text = re.sub(r'RT[\s]+', '', text)
 	text = re.sub(r'https?:\/\/S+', '', text)
-	return text
+	text = re.sub(r'[^\w\s]', '', text)
+	return text.strip()
 
 # Determine sentiment in the given text and return 'positive', 'neutral', or 'negative'
 def compute_sentiment(tokenizer, model, post_text):
