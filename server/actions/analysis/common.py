@@ -1,5 +1,4 @@
 ## This module defines common functions for sentiment and similarity analysis
-import torch
 import re
 
 # Clean up post text
@@ -12,18 +11,15 @@ def clean_post(text):
 	return text.strip()
 
 # Determine sentiment in the given text and return 'positive', 'neutral', or 'negative'
-def compute_sentiment(tokenizer, model, post_text):
-	#Designed to work using nlptown/bert-base-multilingual-uncased-sentiment
-	post_text = clean_post(post_text)
-	tokens = tokenizer.encode(post_text, return_tensors='pt')
-	result = model(tokens)
-	category = torch.argmax(result.logits)
-	if category in [0, 1]:
-		return 'negative'
-	elif category == 2:
+def compute_sentiment(sentiment_model, post_text):
+	res = sentiment_model.predict([post_text])
+	res = res[0].tolist()
+	if (res[0] > 0.5 and res[1] > 0.5) or (res[0] < 0.5 and res[1] < 0.5):
 		return 'neutral'
-	elif category in [3, 4]:
+	elif res[0] > res[1]:
 		return 'positive'
+	elif res[1] > res[0]:
+		return 'negative'
 
 # Compute similarity between two texts
 def compute_similarity(text1, text2):

@@ -7,7 +7,6 @@ from werkzeug.utils import secure_filename
 ## Backend functionality
 import actions.user, actions.post, actions.analysis.twitter, actions.analysis.common
 ## Sentiment and Similarity processing
-#from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import keras, keras.layers as layers
 import tensorflow as tf
 import tensorflow_text as text
@@ -54,9 +53,7 @@ def load_sentiment_model():
 server = Flask(__name__)
 server.config['MAX_CONTENT_LENGTH'] = 5120 * 1024
 sql_handle = None
-## Sentiment and similarity processing modules
-#smt_tokenizer = AutoTokenizer.from_pretrained('nlptown/bert-base-multilingual-uncased-sentiment')
-#smt_model = AutoModelForSequenceClassification.from_pretrained('nlptown/bert-base-multilingual-uncased-sentiment')
+## Sentiment and similarity processing models
 sentiment_model = load_sentiment_model()
 similarity_model = load_similarity_model()
 
@@ -258,7 +255,7 @@ def report_post():
 @server.route('/twitterGetTrendsAndSentiments', methods = ['GET'])
 def twitter_get_trends_and_sentiments():
 	#This URL should be called when the page is loaded
-	twitter_tns = actions.analysis.twitter.trends_and_sentiments(smt_tokenizer, smt_model)
+	twitter_tns = actions.analysis.twitter.trends_and_sentiments(sentiment_model)
 	return Response(twitter_tns, 200, mimetype = 'application/json')
 
 ## Find posts similar to the user's new post
@@ -276,7 +273,7 @@ def local_get_similar_posts():
 @server.route('/computePostSentiment', methods = ['GET'])
 def compute_post_sentiment():
 	post_text = request.args['content']
-	sentiment_res = actions.analysis.common.compute_sentiment(smt_tokenizer, smt_model, post_text)
+	sentiment_res = actions.analysis.common.compute_sentiment(sentiment_model, post_text)
 	return make_response(sentiment_res, 200)
 
 if __name__ == '__main__':
