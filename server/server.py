@@ -261,13 +261,15 @@ def twitter_get_trends_and_sentiments():
 ## Find posts similar to the user's new post
 @server.route('/twitterGetSimilarPosts', methods = ['GET'])
 def twitter_get_similar_posts():
-	#TODO: Get posts most similar to user's posts from Twitter
-	return None
+	post_text = request.args['content']
+	tw_similarity_res = actions.analysis.twitter.similar_posts(similarity_model, post_text)
+	return Response(tw_similarity_res, 200, mimetype = 'application/json')
 
 @server.route('/localGetSimilarPosts', methods = ['GET'])
 def local_get_similar_posts():
-	#TODO: Get posts most similar to user's posts from local DB
-	return None
+	post_text = request.args['content']
+	local_similarity_res = actions.analysis.localdb.similar_posts(similarity_model, post_text)
+	return Response(local_similarity_res, 200, mimetype = 'application/json')
 
 ## Compute sentiment of new post:
 @server.route('/computePostSentiment', methods = ['GET'])
