@@ -11,7 +11,44 @@ import actions.user, actions.post, actions.analysis.twitter, actions.analysis.co
 import keras
 import tensorflow as tf
 import tensorflow_text as text
-import tensor as hub
+import tensorflow_hub as hub
+from keras.optimizer_v2.adam import Adam
+
+#Load model for Semantic Similarity
+def load_similarity_model():
+	#URLs for getting layers from TF-Hub
+	preprocess_url = 'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3'
+	l6h128_url = 'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-6_H-128_A-2/2'
+	#Define model
+	text_input_layer = keras.Input(shape=(), dtype=tf.string)
+	preprocess_layer = hub.KerasLayer(preprocess_url, trainable = False)(text_input_layer)
+	bert_layer = hub.KerasLayer(l6h128_url, trainable = True)(preprocess_layer)
+	bert_norm = layers.BatchNormalization(bert_layer['pooled_output'])
+	output_layer = layers.Dense(units = 2, activation = 'softmax', dtype = tf.float32)(bert_norm)
+	similarity = keras.Model(text_input_layer, output_layer)
+	similarity.compile(optimizer = adam_opt, loss = 'categorical_crossentropy', metrics = ['accuracy'])
+	#Load weights from file
+	similarity.load_weights('./models/similarity_l6h128_00001.h5')
+	#Return model
+	return similarity
+
+#Load model for Sentiment Analysis
+def load_sentiment_model():
+	#URLs for getting layers from TF-Hub
+	preprocess_url = 'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3'
+	l4h256_url = 'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-4_H-256_A-4/2'
+	#Define model
+	text_input_layer = keras.Input(shape=(), dtype=tf.string)
+	preprocess_layer = hub.KerasLayer(preprocess_url, trainable = False)(text_input_layer)
+	bert_layer = hub.KerasLayer(l6h128_url, trainable = True)(preprocess_layer)
+	bert_norm = layers.BatchNormalization(bert_layer['pooled_output'])
+	output_layer = layers.Dense(units = 2, activation = 'sigmoid', dtype = tf.float32)(bert_norm)
+	sentiment = keras.Model(text_input_layer, output_layer)
+	sentiment.compile(optimizer = adam_opt, loss = 'categorical_crossentropy', metrics = ['accuracy'])
+	#Load weights from file
+	sentiment.load_weights('./models/sentiment_l4h256_00001.h5')
+	#Return model
+	return sentiment
 
 ## Server setup:
 server = Flask(__name__)
@@ -20,8 +57,8 @@ sql_handle = None
 ## Sentiment and similarity processing modules
 #smt_tokenizer = AutoTokenizer.from_pretrained('nlptown/bert-base-multilingual-uncased-sentiment')
 #smt_model = AutoModelForSequenceClassification.from_pretrained('nlptown/bert-base-multilingual-uncased-sentiment')
-sentiment_model = None
-similarity_model = None
+sentiment_model = load_sentiment_model()
+similarity_model = load_similarity_model()
 
 @server.before_first_request
 def connect_db():

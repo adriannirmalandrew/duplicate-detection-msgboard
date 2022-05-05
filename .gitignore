@@ -2,4 +2,5 @@
 *.jpg
 *.png
 *.log
+*.h5
 /www/images/*
