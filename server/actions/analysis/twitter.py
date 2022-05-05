@@ -61,5 +61,17 @@ def trends_and_sentiments(sentiment_model):
 	return json.dumps(topic_tw_smt)
 
 # Get posts most similar to user's input
-def similar_posts():
-	return None
+def similar_posts(similarity_model, post_text):
+	#Search for posts
+	tweets = _get_topic_tweets(post_text, 29)
+	#Compute similarities
+	scores = dict()
+	for tw in tweets:
+		id = tw.id
+		content = tw.text
+		sim_score = compute_similarity(similarity_model, post_text, content)
+		if sim_score < 0:
+			continue
+		scores['id'] = [content, sim_score]
+	#Return as JSON
+	return json.dumps(scores)

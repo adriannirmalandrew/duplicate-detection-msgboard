@@ -5,7 +5,7 @@ import mysql.connector as sqlconn
 from flask import Flask, request, make_response, Response
 from werkzeug.utils import secure_filename
 ## Backend functionality
-import actions.user, actions.post, actions.analysis.twitter, actions.analysis.common
+import actions.user, actions.post, actions.analysis.twitter, actions.analysis.localdb, actions.analysis.common
 ## Sentiment and Similarity processing
 import keras, keras.layers as layers
 import tensorflow as tf
