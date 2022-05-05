@@ -8,7 +8,7 @@ from werkzeug.utils import secure_filename
 import actions.user, actions.post, actions.analysis.twitter, actions.analysis.common
 ## Sentiment and Similarity processing
 #from transformers import AutoTokenizer, AutoModelForSequenceClassification
-import keras
+import keras, keras.layers as layers
 import tensorflow as tf
 import tensorflow_text as text
 import tensorflow_hub as hub
@@ -23,10 +23,10 @@ def load_similarity_model():
 	text_input_layer = keras.Input(shape=(), dtype=tf.string)
 	preprocess_layer = hub.KerasLayer(preprocess_url, trainable = False)(text_input_layer)
 	bert_layer = hub.KerasLayer(l6h128_url, trainable = True)(preprocess_layer)
-	bert_norm = layers.BatchNormalization(bert_layer['pooled_output'])
+	bert_norm = layers.BatchNormalization()(bert_layer['pooled_output'])
 	output_layer = layers.Dense(units = 2, activation = 'softmax', dtype = tf.float32)(bert_norm)
 	similarity = keras.Model(text_input_layer, output_layer)
-	similarity.compile(optimizer = adam_opt, loss = 'categorical_crossentropy', metrics = ['accuracy'])
+	similarity.compile(optimizer = Adam(learning_rate = 0.00001), loss = 'categorical_crossentropy', metrics = ['accuracy'])
 	#Load weights from file
 	similarity.load_weights('./models/similarity_l6h128_00001.h5')
 	#Return model
@@ -41,10 +41,10 @@ def load_sentiment_model():
 	text_input_layer = keras.Input(shape=(), dtype=tf.string)
 	preprocess_layer = hub.KerasLayer(preprocess_url, trainable = False)(text_input_layer)
 	bert_layer = hub.KerasLayer(l4h256_url, trainable = True)(preprocess_layer)
-	bert_norm = layers.BatchNormalization(bert_layer['pooled_output'])
+	bert_norm = layers.BatchNormalization()(bert_layer['pooled_output'])
 	output_layer = layers.Dense(units = 2, activation = 'sigmoid', dtype = tf.float32)(bert_norm)
 	sentiment = keras.Model(text_input_layer, output_layer)
-	sentiment.compile(optimizer = adam_opt, loss = 'categorical_crossentropy', metrics = ['accuracy'])
+	sentiment.compile(optimizer = Adam(learning_rate = 0.00001), loss = 'categorical_crossentropy', metrics = ['accuracy'])
 	#Load weights from file
 	sentiment.load_weights('./models/sentiment_l4h256_00001.h5')
 	#Return model
