@@ -40,7 +40,7 @@ def load_sentiment_model():
 	#Define model
 	text_input_layer = keras.Input(shape=(), dtype=tf.string)
 	preprocess_layer = hub.KerasLayer(preprocess_url, trainable = False)(text_input_layer)
-	bert_layer = hub.KerasLayer(l6h128_url, trainable = True)(preprocess_layer)
+	bert_layer = hub.KerasLayer(l4h256_url, trainable = True)(preprocess_layer)
 	bert_norm = layers.BatchNormalization(bert_layer['pooled_output'])
 	output_layer = layers.Dense(units = 2, activation = 'sigmoid', dtype = tf.float32)(bert_norm)
 	sentiment = keras.Model(text_input_layer, output_layer)
