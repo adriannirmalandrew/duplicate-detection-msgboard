@@ -6,16 +6,22 @@ from flask import Flask, request, make_response, Response
 from werkzeug.utils import secure_filename
 ## Backend functionality
 import actions.user, actions.post, actions.analysis.twitter, actions.analysis.common
-## Sentiment processing
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
+## Sentiment and Similarity processing
+#from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import keras
+import tensorflow as tf
+import tensorflow_text as text
+import tensor as hub
 
 ## Server setup:
 server = Flask(__name__)
 server.config['MAX_CONTENT_LENGTH'] = 5120 * 1024
 sql_handle = None
-## Sentiment processing modules
-smt_tokenizer = AutoTokenizer.from_pretrained('nlptown/bert-base-multilingual-uncased-sentiment')
-smt_model = AutoModelForSequenceClassification.from_pretrained('nlptown/bert-base-multilingual-uncased-sentiment')
+## Sentiment and similarity processing modules
+#smt_tokenizer = AutoTokenizer.from_pretrained('nlptown/bert-base-multilingual-uncased-sentiment')
+#smt_model = AutoModelForSequenceClassification.from_pretrained('nlptown/bert-base-multilingual-uncased-sentiment')
+sentiment_model = None
+similarity_model = None
 
 @server.before_first_request
 def connect_db():
