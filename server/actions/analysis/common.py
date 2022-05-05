@@ -22,5 +22,11 @@ def compute_sentiment(sentiment_model, post_text):
 		return 'negative'
 
 # Compute similarity between two texts
-def compute_similarity(text1, text2):
-	return None
+def compute_similarity(similarity_model, text1, text2):
+	sim_input = '[CLS] ' + text1 + ' [SEP] ' + text2 + ' [SEP]'
+	res = similarity_model.predict([sim_input])
+	res = res[0].tolist()
+	if res[0] >= res[1]:
+		return res[0]
+	else:
+		return (-1 * res[1])
