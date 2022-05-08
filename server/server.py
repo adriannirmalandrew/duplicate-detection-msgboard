@@ -1,6 +1,8 @@
 #!/usr/bin/python
 ## Essentials
 import os
+os.environ['TFHUB_CACHE_DIR'] = '$HOME/.cache/tfhub_modules'
+
 import mysql.connector as sqlconn
 from flask import Flask, request, make_response, Response
 from werkzeug.utils import secure_filename
