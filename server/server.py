@@ -1,7 +1,7 @@
 #!/usr/bin/python
 ## Essentials
 import os
-os.environ['TFHUB_CACHE_DIR'] = '$HOME/.cache/tfhub_modules'
+os.environ['TFHUB_CACHE_DIR'] = os.environ['HOME'] + '/.cache/tfhub_modules'
 
 import mysql.connector as sqlconn
 from flask import Flask, request, make_response, Response
@@ -56,13 +56,15 @@ server = Flask(__name__)
 server.config['MAX_CONTENT_LENGTH'] = 5120 * 1024
 sql_handle = None
 ## Sentiment and similarity processing models
-sentiment_model = load_sentiment_model()
-similarity_model = load_similarity_model()
+sentiment_model = None
+similarity_model = None
 
 @server.before_first_request
 def connect_db():
-	global sql_handle
+	global sql_handle, sentiment_model, similarity_model
 	sql_handle = sqlconn.connect(host = 'localhost', user = 'project', password = 'project', database = 'socialmedia')
+	sentiment_model = load_sentiment_model()
+	similarity_model = load_similarity_model()
 
 ## Common functions: Invalid session response
 def invalid_session_response():

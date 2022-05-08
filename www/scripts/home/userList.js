@@ -3,7 +3,6 @@ function generateUserTable(usersData) {
 		"data": usersData,
 		"columns": [
 			{ "title": "Username" },
-			{ "title": "Admin?" },
 		],
 	});
 }
@@ -23,8 +22,6 @@ function getUserList() {
 				tempName.attr("href", "/viewProfile.html?user=" + row[0]);
 				tempName.html(row[0]);
 				tempList.push(tempName[0].outerHTML);
-				//Is Admin?
-				tempList.push(row[1]);
 				//Add to row list
 				usersData.push(tempList);
 			};

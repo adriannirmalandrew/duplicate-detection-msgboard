@@ -71,7 +71,7 @@ def logout(handle, username, session_token):
 # Get all user names:
 def get_all(handle):
 	get_all_cur = handle.cursor()
-	get_all_cur.execute('select username, is_admin from users')
+	get_all_cur.execute('select username from users')
 	user_list = get_all_cur.fetchall()
 	get_all_cur.close()
 	#Convert each row to list format
