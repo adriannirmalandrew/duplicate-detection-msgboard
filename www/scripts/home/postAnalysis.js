@@ -1,24 +1,26 @@
 //Compute sentiments of given text
-function computeNewPostSentiment(content) {
+function displayNewPostSentiment(postSentimentValue) {
+	//Set value in post creation form
+	let newPostSentimentInput = $("#new-post-sentiment-input");
+	newPostSentimentInput.attr("value", postSentimentValue);
+	//Set value in analysis section
+	let newPostSentiment = $("#post-sentiment-label");
+	newPostSentiment.html("<b>Computed sentiment label: " + postSentimentValue + "</b>");
+}
+//Handle butotn action
+function computeNewPostSentiment() {
+	//Get new post content
+	let postContent = $("#new-post-content").val();
+	//Make AJAX request
 	$.ajax({
-		url: "/action/computePostSentiment?content=" + content,
+		url: "/action/computePostSentiment?content=" + postContent,
 		method: "GET",
 		statusCode: {
 			200: function(sentiment_res) {
-				return sentiment_res;
+				displayNewPostSentiment(sentiment_res);
 			},
 		},
 	});
-}
-//Handle sentiment computation button
-function actionNewPostSentiment() {
-	let postContent = $("#new-post-content").val();
-	let postSentiment = computeNewPostSentiment(postContent);
-	//Set value in document element
-	//TODO
-	//Set value in post creation form
-	let newPostSentimentInput = $("#new-post-sentiment");
-	newPostSentimentInput.attr("value", postSentiment);
 }
 
 //Get similar posts from local database

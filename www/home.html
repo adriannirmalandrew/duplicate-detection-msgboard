@@ -42,7 +42,7 @@
 				<label for="new-post-image">Image:</label>
 				<input id="new-post-image" name="image" type="file" accept="image/*"><br>
 			</div>
-			<input id="new-post-sentiment" type="hidden" name="sentiment" value="">
+			<input id="new-post-sentiment-input" type="hidden" name="sentiment" value="">
 			<input type="submit" value="Create Post" onclick="uploadPost()" class="btn btn-primary">
 		</form>
 	</div>
@@ -51,8 +51,8 @@
 		<h3 style="text-align:center">New Post Analysis</h3>
 		<div id="post-sentiment-div" class="analyzer">
 			<h4>Current Post Sentiment</h4>
-			<button class="btn btn-primary btn-sm" onclick="actionNewPostSentiment()">Analyze Sentiment</button>
-			<div id="post-setiment-label"></div>
+			<button class="btn btn-primary btn-sm" onclick="computeNewPostSentiment()">Analyze Sentiment</button>
+			<div id="post-sentiment-label"></div>
 		</div>
 		
 		<div id="similar-local-posts-div" class="analyzer">
@@ -70,7 +70,7 @@
 		<div id="twitter-sentiments-div" class="analyzer">
 			<h4>Current Twitter Trends</h4>
 			<button class="btn btn-sm btn-primary" onclick="displayTwitterSentiments()">Get Twitter Trend Sentiments</button>
-			<div id="twitter-sentiments-list"></div>
+			<div id="twitter-trend-sentiments-list"></div>
 		</div>
 	</div>
 	<hr>
