@@ -69,12 +69,48 @@ function getSimilarPostsLocal() {
 }
 
 //Get similar posts from Twitter
-function displaySimilarTwitter() {
-	//TODO
+function displaySimilarTwitter(twitterSimJson) {
+	console.log(twitterSimJson);
+	//Generate data for table
+	let simData = [];
+	for(postId of Object.keys(twitterSimJson)) {
+		simRow = [];
+		//Post ID
+		simRow.push(postId);
+		//Content
+		simRow.push(twitterSimJson[postId][0]);
+		//Similarity
+		simRow.push(twitterSimJson[postId][1]);
+		//Add to rows
+		simData.push(simRow);
+	}
+	//Create table
+	$("#similar-twitter-posts-table").DataTable({
+		"data": simData,
+		"columns": [
+			{"title": "Post ID"},
+			{"title": "Content"},
+			{"title": "Similarity"},
+		],
+		"order": [
+			[2, "desc"],
+		],
+	})
 }
 //Handle button action
 function getSimilarPostsTwitter() {
-	//TODO
+	//Get new post content
+	let postContent = $("#new-post-content").val();
+	//Make AJAX request
+	$.ajax({
+		url: "/action/twitterGetSimilarPosts?content=" + postContent,
+		method: "GET",
+		statusCode: {
+			200: function(twitterSimJson) {
+				displaySimilarTwitter(twitterSimJson);
+			},
+		},
+	});
 }
 
 //Get trending topics from Twitter and their associated sentiments
