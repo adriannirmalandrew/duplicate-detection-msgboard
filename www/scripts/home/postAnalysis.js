@@ -42,12 +42,44 @@ function getSimilarPostsTwitter() {
 }
 
 //Get trending topics from Twitter and their associated sentiments
-function displayTwitterSentiments() {
-	//TODO
+function twitterSentimentTable(trendsJson) {
+	//Generate data for table
+	let trendsData = [];
+	for(trend of Object.keys(trendsJson)) {
+		//Topic
+		trendRow = [];
+		trendRow.push(trend);
+		//Sentiments
+		sentiments = trendsJson[trend];
+		trendRow.push(sentiments["positive"]);
+		trendRow.push(sentiments["neutral"]);
+		trendRow.push(sentiments["negative"]);
+		//Add to rows
+		trendsData.push(trendRow);
+	}
+	//Create table
+	$("#twitter-trend-sentiments-table").DataTable({
+		"data": trendsData,
+		"columns": [
+			{"title": "Trend"},
+			{"title": "Positive"},
+			{"title": "Neutral"},
+			{"title": "Negative"},
+		],
+	});
 }
 //Handle button action
 function getTwitterSentiments() {
-	//TODO
+	//Make AJAX request
+	$.ajax({
+		url: "/action/twitterGetTrendsAndSentiments",
+		method: "GET",
+		statusCode: {
+			200: function(trendsJson) {
+				twitterSentimentTable(trendsJson);
+			}
+		},
+	});
 }
 
 //Get trending topics on page load
