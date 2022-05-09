@@ -11,3 +11,7 @@ body, #create-post-div, #user-list-div, #new-post-analysis-div {
 #header-div {
 	text-align: center;
 }
+
+.analyzer {
+	margin: 0.5%;
+}

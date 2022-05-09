@@ -1,11 +1,3 @@
-//Get trending topics from Twitter and their associated sentiments
-function getTwitterSentiments() {
-	//TODO
-}
-function displayTwitterSentiments() {
-	//TODO
-}
-
 //Compute sentiments of given text
 function computeNewPostSentiment(content) {
 	$.ajax({
@@ -19,7 +11,7 @@ function computeNewPostSentiment(content) {
 	});
 }
 //Handle sentiment computation button
-function newPostSentimentAction() {
+function actionNewPostSentiment() {
 	let postContent = $("#new-post-content").val();
 	let postSentiment = computeNewPostSentiment(postContent);
 	//Set value in document element
@@ -29,15 +21,27 @@ function newPostSentimentAction() {
 	newPostSentimentInput.attr("value", postSentiment);
 }
 
-//Get posts similar to user's new post
-function getSimilarPostsTwitter() {
-	//TODO
-}
+//Get similar posts from local database
 function getSimilarPostsLocal() {
 	//TODO
 }
-//Handle similar post button
-function actionGetSimilarPosts() {
+function actionGetSimilarLocal() {
+	//TODO
+}
+
+//Get similar posts from Twitter
+function getSimilarPostsTwitter() {
+	//TODO
+}
+function actionGetSimilarTwitter() {
+	//TODO
+}
+
+//Get trending topics from Twitter and their associated sentiments
+function getTwitterSentiments() {
+	//TODO
+}
+function displayTwitterSentiments() {
 	//TODO
 }
 
