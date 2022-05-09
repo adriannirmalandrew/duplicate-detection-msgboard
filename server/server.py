@@ -173,15 +173,10 @@ def upload_post():
 		return invalid_session_response()
 	#Get post data:
 	post_content = request.form['content']
-	post_image = request.files['image']
-	has_image = (post_image.filename != '')
-	#Upload post:
-	post_id = actions.post.upload(sql_handle, username, post_content, has_image)
+	post_sentiment = request.form['sentiment']
+	post_id = actions.post.upload(sql_handle, username, post_content, post_sentiment)
 	if post_id is None:
 		return make_response('Post Uploading Failed!', 500)
-	#Upload file, if exists:
-	if has_image:
-		post_image.save(os.path.join('../www/images/', secure_filename(post_id)))
 	#Success
 	return make_response('Post Uploaded', 200)
 
