@@ -38,15 +38,9 @@ function displayPostData(postJson) {
 	//Show content
 	let postContent = $("#post-display-content");
 	postContent.html("\"" + postJson["content"] + "\"");
-	//Show image, if exists
-	if(postJson["has_image"] == 1) {
-		let postImageDiv = $("#post-display-image");
-		let imageObj = $("<img>");
-		imageObj.attr("src", "/images/" + postJson["post_id"]);
-		imageObj.attr("height", 400);
-		//imageObj.attr("width", 400);
-		postImageDiv.append(imageObj);
-	}
+	//Show sentiment
+	let postSentiment = $("#post-display-sentiment");
+	postSentiment.html("<b>Sentiment Label: " + postJson["sentiment"] + "</b>");
 	//Show post actions if logged in:
 	showPostActions(postJson);
 	//Check if post is a duplicate:

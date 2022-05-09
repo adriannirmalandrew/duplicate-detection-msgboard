@@ -7,7 +7,7 @@ function displayNewPostSentiment(postSentimentValue) {
 	let newPostSentiment = $("#post-sentiment-label");
 	newPostSentiment.html("<b>Computed sentiment label: " + postSentimentValue + "</b>");
 }
-//Handle butotn action
+//Handle button action
 function computeNewPostSentiment() {
 	//Get new post content
 	let postContent = $("#new-post-content").val();
@@ -24,26 +24,29 @@ function computeNewPostSentiment() {
 }
 
 //Get similar posts from local database
-function getSimilarPostsLocal() {
+function displaySimilarLocal() {
 	//TODO
 }
-function actionGetSimilarLocal() {
+//Handle button action
+function getSimilarPostsLocal() {
 	//TODO
 }
 
 //Get similar posts from Twitter
-function getSimilarPostsTwitter() {
+function displaySimilarTwitter() {
 	//TODO
 }
-function actionGetSimilarTwitter() {
+//Handle button action
+function getSimilarPostsTwitter() {
 	//TODO
 }
 
 //Get trending topics from Twitter and their associated sentiments
-function getTwitterSentiments() {
+function displayTwitterSentiments() {
 	//TODO
 }
-function displayTwitterSentiments() {
+//Handle button action
+function getTwitterSentiments() {
 	//TODO
 }
 
