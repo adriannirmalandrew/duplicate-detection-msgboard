@@ -24,12 +24,48 @@ function computeNewPostSentiment() {
 }
 
 //Get similar posts from local database
-function displaySimilarLocal() {
-	//TODO
+function displaySimilarLocal(localSimJson) {
+	console.log(localSimJson);
+	//Generate data for table
+	let simData = [];
+	for(postId of Object.keys(localSimJson)) {
+		simRow = [];
+		//Post ID
+		simRow.push(postId);
+		//Content
+		simRow.push(localSimJson[postId][0]);
+		//Similarity
+		simRow.push(localSimJson[postId][1]);
+		//Add to rows
+		simData.push(simRow);
+	}
+	//Create table
+	$("#similar-local-posts-table").DataTable({
+		"data": simData,
+		"columns": [
+			{"title": "Post ID"},
+			{"title": "Content"},
+			{"title": "Similarity"},
+		],
+		"order": [
+			[2, "desc"],
+		],
+	})
 }
 //Handle button action
 function getSimilarPostsLocal() {
-	//TODO
+	//Get new post content
+	let postContent = $("#new-post-content").val();
+	//Make AJAX request
+	$.ajax({
+		url: "/action/localGetSimilarPosts?content=" + postContent,
+		method: "GET",
+		statusCode: {
+			200: function(localSimJson) {
+				displaySimilarLocal(localSimJson);
+			},
+		},
+	});
 }
 
 //Get similar posts from Twitter

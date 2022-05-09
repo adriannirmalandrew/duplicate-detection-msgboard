@@ -267,7 +267,7 @@ def twitter_get_similar_posts():
 @server.route('/localGetSimilarPosts', methods = ['GET'])
 def local_get_similar_posts():
 	post_text = request.args['content']
-	local_similarity_res = actions.analysis.localdb.similar_posts(similarity_model, post_text)
+	local_similarity_res = actions.analysis.localdb.similar_posts(sql_handle, similarity_model, post_text)
 	return Response(local_similarity_res, 200, mimetype = 'application/json')
 
 ## Compute sentiment of new post:
