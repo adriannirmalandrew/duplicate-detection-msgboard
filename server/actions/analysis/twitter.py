@@ -72,6 +72,6 @@ def similar_posts(similarity_model, post_text):
 		sim_score = compute_similarity(similarity_model, post_text, content)
 		if sim_score < 0:
 			continue
-		scores['id'] = [content, sim_score]
+		scores[id] = [content, sim_score]
 	#Return as JSON
 	return json.dumps(scores)
