@@ -9,7 +9,7 @@ import json
 from actions.analysis.common import compute_sentiment, compute_similarity, clean_post
 
 # Twitter API Bearer Token
-_twitter_bearer_token = 'AAAAAAAAAAAAAAAAAAAAAAsjbAEAAAAAk3hZtpkx6NK3QEPLwWOOpVIorPo%3DgXNzITXUqvqLcRwFFT6QSn5MoZBuEPBsgNo5TG216EMTMiKwL7'
+_twitter_bearer_token = ''
 
 ## Trends and sentiments helper methods
 # Get trends using Selenium
